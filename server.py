@@ -1,7 +1,9 @@
 import os
 
 from flask import Flask, jsonify, request, send_from_directory
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
