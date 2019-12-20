@@ -1,19 +1,21 @@
 import os
 
 from flask import Flask, jsonify, request, send_from_directory
-from flask_cors import CORS
+# from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-# app = Flask(__name__)
-app = Flask(__name__, static_folder='../client/public/build')
+app = Flask(__name__)
+# app = Flask(__name__, static_folder='../client/public/build')
+
 app.config["SQLALCHEMY_DATABASE_URI"] = \
     f"sqlite:///{os.path.join(basedir, 'data.sqlite')}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 db = SQLAlchemy(app)
 
-CORS(app, resources={r'/*': {'origins': '*'}})
+# CORS(app, resources={r'/*': {'origins': '*'}})
 
 from models import List, Note
 
