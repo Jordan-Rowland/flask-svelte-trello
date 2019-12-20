@@ -1,6 +1,10 @@
 import os
 
-from flask import Flask, jsonify, request, send_from_directory
+from flask import (Flask,
+    jsonify,
+    render_template,
+    request,
+    send_from_directory)
 # from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
@@ -8,7 +12,7 @@ from flask_sqlalchemy import SQLAlchemy
 basedir = os.path.abspath(os.path.dirname(__file__))
 # app = Flask(__name__)
 app = Flask(__name__,
-    static_folder='static/build',)
+    static_folder='static/',)
     # template_folder='/client/public/')
 
 app.config["SQLALCHEMY_DATABASE_URI"] = \
@@ -24,7 +28,8 @@ from models import List, Note
 ####################################
 @app.route("/")
 def base():
-    return send_from_directory('client/public', 'index.html')
+    # return send_from_directory('client/public', 'index.html')
+    return render_template('index.html')
 
 
 @app.route("/<path:path>")
