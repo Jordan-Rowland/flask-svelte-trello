@@ -6,7 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-app = Flask(__name__)
+# app = Flask(__name__)
+app = Flask(__name__, static_folder='../client/public/build')
 app.config["SQLALCHEMY_DATABASE_URI"] = \
     f"sqlite:///{os.path.join(basedir, 'data.sqlite')}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
