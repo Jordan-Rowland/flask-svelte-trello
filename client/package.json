@@ -18,5 +18,4 @@
   "dependencies": {
     "sirv-cli": "^0.4.4"
   },
-  "proxy": "http://localhost:3000"
 }

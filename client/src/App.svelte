@@ -66,7 +66,7 @@
 
 :global(body) {
   margin: 0;
-  background-color: hsla(258, 100%, 96%, 1);
+  background-color: hsl(170, 45%, 95%);
 }
 
 .column {
@@ -79,7 +79,7 @@
   position: fixed;
   width: 99%;
   display: flex;
-  background-color: hsla(258, 100%, 61%, 1);
+  background-color: hsla(228, 100%, 61%, 1);
   border-radius: 3px;
   justify-content: center;
   align-content: center;
