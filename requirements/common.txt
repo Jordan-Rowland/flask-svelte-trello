@@ -7,3 +7,4 @@ MarkupSafe==1.1.1
 SQLAlchemy==1.3.12
 Werkzeug==0.16.0
 psycopg2==2.8.2
+Flask-Cors==3.0.7

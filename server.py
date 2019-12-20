@@ -10,6 +10,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = \
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
+CORS(app, resources={r'/*': {'origins': '*'}})
+
 from models import List, Note
 
 ####################################
@@ -78,4 +80,4 @@ def delete_note(note_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=3000)
+    app.run(port=3000)
