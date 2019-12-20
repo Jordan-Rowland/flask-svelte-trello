@@ -57,8 +57,8 @@ def add_list():
 @app.route("/list/<int:list_id>/notes")
 def get_notes(list_id):
     notes = Note.query.filter_by(
-        list_id=list_id
-    )
+        list_id=list_id).order_by(
+        Note.timestamp.desc())
     return jsonify({
         "notes": [note.to_json() for note in notes]
     })
