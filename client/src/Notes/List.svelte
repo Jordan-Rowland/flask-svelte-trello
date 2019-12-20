@@ -20,7 +20,8 @@
 
   async function getNotes() {
     const res = await fetch(
-      `http://localhost:3000/list/${id}/notes`);
+      // `http://localhost:3000/list/${id}/notes`);
+      `/list/${id}/notes`);
     const resJson = await res.json();
     notes = resJson.notes;
   }
@@ -28,7 +29,8 @@
 
   async function addNote() {
     const res = await fetch(
-      "http://localhost:3000/addNote", {
+      // "http://localhost:3000/addNote", {
+      "/addNote", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -45,7 +47,8 @@
   async function deleteNote(event) {
     const selectedId = event.detail;
     const res = await fetch(
-      `http://localhost:3000/deleteNote/${selectedId}`, {method: "DELETE"}
+      // `http://localhost:3000/deleteNote/${selectedId}`, {method: "DELETE"}
+      `/deleteNote/${selectedId}`, {method: "DELETE"}
     );
     let updatedNotes = notes.filter(
       note => note.id !== selectedId

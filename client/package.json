@@ -17,5 +17,5 @@
   },
   "dependencies": {
     "sirv-cli": "^0.4.4"
-  },
+  }
 }
