@@ -37,22 +37,22 @@ class Note(db.Model):
             "id": self.id,
             "body": self.body,
             "timestamp": self.timestamp,
-            # "url": url_for('main.get_post', post_id=self.id)
+            "list_id": self.list_id
         }
         return json_post
 
     @staticmethod
     def from_json(json_note):
         body = json_note.get('body')
-        id = json_note.get('id')
+        list_id = json_note.get('list_id')
         if (
             body is None
-            or id == None
+            or list_id == None
             or body == ''
-            or id == ''
+            or list_id == ''
             ):
-            raise Exception('post does not have any body or id')
-        return Note(body=body, list_id=id)
+            raise Exception('post does not have any body or list_id')
+        return Note(body=body, list_id=list_id)
 
 
 class List(db.Model):
@@ -61,6 +61,7 @@ class List(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.Text(), index=True, nullable=False)
     notes = db.relationship("Note", backref="list")
+    # user_id needs to go here
 
 
     def __init__(self, name):
@@ -76,7 +77,6 @@ class List(db.Model):
     @staticmethod
     def from_json(json_list):
         name = json_list.get('name')
-        id = json_list.get('id')
         if name is None or name == '':
-            raise Exception('post does not have any name')
+            raise Exception('List does not have any name')
         return List(name=name)

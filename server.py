@@ -10,9 +10,9 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-# app = Flask(__name__)
-app = Flask(__name__,
-    static_folder='static/',)
+app = Flask(__name__)
+# app = Flask(__name__,
+    # static_folder='static/',)
     # template_folder='/client/public/')
 
 app.config["SQLALCHEMY_DATABASE_URI"] = \
