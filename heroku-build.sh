@@ -1,6 +1,6 @@
 
 rm -rvf ./static/*
 
-cp -v client/public/global.css ./static/
 # cp client/public/index.html ./templates/
+cp -v client/public/global.css ./static/
 cp -rv client/public/build/ ./static/
