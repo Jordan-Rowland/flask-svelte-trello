@@ -68,7 +68,9 @@
 <div class="list">
 <div>
   <div class="name">
-    {name}
+    <span class="list-name">
+      {name}
+    </span>
     <span class="delete-list"
       on:click={deleteList}>X</span>
   </div>
@@ -103,6 +105,7 @@
   background-color: hsla(228, 100%, 61%, 1);
   /*background-color: hsla(228, 100%, 21%, 1);*/
   padding: 0.15rem 0.35rem;
+  border-radius: 3px;
 }
 
 .delete-list:hover {
@@ -116,6 +119,10 @@
   flex-direction: column;
   min-width: 21vw;
   border-radius: 3px;
+}
+
+.list-name {
+  margin-left: 5px;
 }
 
 .new-note {

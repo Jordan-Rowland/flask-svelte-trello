@@ -41,9 +41,10 @@ button {
   bottom: -2px;
   right: 6px;
   border: none;
-  background-color: hsla(258, 100%, 89%, 1);
+  background-color: hsla(228, 100%, 89%, 1);
   border-radius: 3px;
-  padding: 0.25rem;
+  padding: 0.15rem 0.35rem;
+  font-weight: 800;
   }
 
 button:hover {
