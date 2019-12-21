@@ -72,6 +72,11 @@
   background-color: hsl(170, 45%, 95%);
 }
 
+:global(*) {
+  /*font-family: 'Lato', sans-serif;*/
+  /*font-family: 'Mansalva', cursive;*/
+}
+
 .column {
   display: flex;
   justify-content: flex-start;

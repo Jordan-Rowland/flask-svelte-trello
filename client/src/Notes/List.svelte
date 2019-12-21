@@ -118,6 +118,7 @@
   display: flex;
   flex-direction: column;
   min-width: 21vw;
+  max-width: 35vw;
   border-radius: 3px;
 }
 

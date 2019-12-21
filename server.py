@@ -20,10 +20,12 @@ db = SQLAlchemy(app)
 from models import List, Note
 
 ####################################
+DEVELOPMENT = bool(os.environ.get("FLASK_DEVELOPMENT"))
+
 @app.route("/")
 def base():
-    if os.environ.get("FLASK_SVELTE"):
-        print(os.environ.get("FLASK_SVELTE"))
+    if DEVELOPMENT:
+        print(f"Development mode: {DEVELOPMENT}")
         return send_from_directory('client/public', 'index.html')
     return render_template('index.html')
 
@@ -45,6 +47,7 @@ def get_lists():
 @app.route("/addList", methods=["POST"])
 def add_list():
     new_list = List.from_json(request.get_json())
+    # new_list['user_id'] = current_user.id
     db.session.add(new_list)
     db.session.commit()
     return jsonify(new_list.to_json()), 201
@@ -88,4 +91,7 @@ def delete_note(note_id):
 
 
 if __name__ == "__main__":
-    app.run(port=3000)
+    if DEVELOPMENT:
+        app.run(debug=True, port=3000)
+    else:
+        app.run(port=3000)
