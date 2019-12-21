@@ -36,7 +36,7 @@
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({body: newNote, id: id}),
+        body: JSON.stringify({body: newNote, list_id: id}),
       }
     );
     notes = [await res.json(), ...notes];
@@ -100,8 +100,9 @@
 }
 
 .delete-list {
-  background-color: hsla(258, 100%, 61%, 1);
-  padding: 0 0.25rem;
+  background-color: hsla(228, 100%, 61%, 1);
+  /*background-color: hsla(228, 100%, 21%, 1);*/
+  padding: 0.15rem 0.35rem;
 }
 
 .delete-list:hover {
@@ -109,7 +110,7 @@
 }
 
 .list {
-  background-color: hsla(258, 100%, 61%, 1);
+  background-color: hsla(228, 100%, 61%, 1);
   margin: 20px;
   display: flex;
   flex-direction: column;

@@ -33,13 +33,13 @@ class Note(db.Model):
         self.list_id = list_id
 
     def to_json(self):
-        json_post = {
+        json_note = {
             "id": self.id,
             "body": self.body,
             "timestamp": self.timestamp,
             "list_id": self.list_id
         }
-        return json_post
+        return json_note
 
     @staticmethod
     def from_json(json_note):
@@ -51,7 +51,7 @@ class Note(db.Model):
             or body == ''
             or list_id == ''
             ):
-            raise Exception('post does not have any body or list_id')
+            raise Exception('Note does not have any body or list_id')
         return Note(body=body, list_id=list_id)
 
 

@@ -5,15 +5,11 @@ from flask import (Flask,
     render_template,
     request,
     send_from_directory)
-# from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
-# app = Flask(__name__,
-    # static_folder='static/',)
-    # template_folder='/client/public/')
 
 app.config["SQLALCHEMY_DATABASE_URI"] = \
     f"sqlite:///{os.path.join(basedir, 'data.sqlite')}"
@@ -21,14 +17,14 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
-# CORS(app, resources={r'/*': {'origins': '*'}})
-
 from models import List, Note
 
 ####################################
 @app.route("/")
 def base():
-    # return send_from_directory('client/public', 'index.html')
+    if os.environ.get("FLASK_SVELTE"):
+        print(os.environ.get("FLASK_SVELTE"))
+        return send_from_directory('client/public', 'index.html')
     return render_template('index.html')
 
 
