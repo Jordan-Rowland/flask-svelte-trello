@@ -114,6 +114,7 @@
   display: flex;
   flex-direction: column;
   min-width: 21vw;
+  border-radius: 3px;
 }
 
 .new-note {
