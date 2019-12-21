@@ -25,7 +25,7 @@ DEVELOPMENT = bool(os.environ.get("FLASK_DEVELOPMENT"))
 @app.route("/")
 def base():
     if DEVELOPMENT:
-        print(f"Development mode: {DEVELOPMENT}")
+        print(f"\n{'*' * 25}\n\nDevelopment mode: {DEVELOPMENT}\n\n{'*' * 25}\n")
         return send_from_directory('client/public', 'index.html')
     return render_template('index.html')
 
@@ -34,6 +34,13 @@ def base():
 def home(path):
     return send_from_directory('client/public', path)
 ####################################
+
+
+@app.route("/token")
+def get_token():
+    return jsonify({
+        "token": "access_token_11295"
+    })
 
 
 @app.route("/lists")
@@ -57,7 +64,9 @@ def add_list():
 def get_notes(list_id):
     notes = Note.query.filter_by(
         list_id=list_id).order_by(
-        Note.timestamp.desc())
+        Note.timestamp.desc()).all()
+    if not notes:
+        return jsonify(status="This list was deleted")
     return jsonify({
         "notes": [note.to_json() for note in notes]
     })

@@ -44,8 +44,8 @@ class Note(db.Model):
         json_note = {
             "id": self.id,
             "body": self.body,
+            "list_id": self.list_id,
             "timestamp": self.timestamp,
-            "list_id": self.list_id
         }
         return json_note
 
@@ -69,7 +69,7 @@ class List(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.Text(), index=True, nullable=False)
     notes = db.relationship("Note", backref="list")
-    user_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
+    # user_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
 
 
     def __init__(self, name):
@@ -79,7 +79,7 @@ class List(db.Model):
         json_list = {
             "id": self.id,
             "name": self.name,
-            "user_id": self.user_id,
+            # "user_id": self.user_id,
         }
         return json_list
 

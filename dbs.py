@@ -1,17 +1,25 @@
 from server import db
 from models import List, Note
+# from models import List, Note, User
 
 
-# n = Note.query.all()
-# l = List.query.all()
+n = Note.query.all()
+l = List.query.filter_by(id=4).first()
+l = List.query.all()
 
 
-try:
-    db.drop_all()
-except Exception:
-    pass
+for i in l:
+    print(i.id)
 
-db.create_all()
+
+
+
+# try:
+#     db.drop_all()
+# except Exception:
+#     pass
+
+# db.create_all()
 
 # l = List(name="list1")
 # n = Note("hello", list_id=1)
