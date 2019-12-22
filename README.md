@@ -14,8 +14,8 @@ Lists will keep adding to the right and you can scroll to see them.
 ## UPDATE 12/22:
 Svello now has user-logins integrated. If you do not want to sign up, and just want to see how this works, please use the following credentials:
 
-email: githubuser@noemail.com
-pass: githubpassword
+email: githubuser@noemail.com  
+pass: githubpassword  
 
 Database has also been migrated from SQLite3 to PostGres, so all notes, lists, and users will persist. Given the state of the project, do not rely on this at this time because notes and lists and users may be deleted while further development is done. 
 
