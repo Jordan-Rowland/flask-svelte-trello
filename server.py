@@ -9,7 +9,7 @@ from flask import (
         send_from_directory
     )
 
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager, current_user, login_user
 
 
 from flask_sqlalchemy import SQLAlchemy
@@ -23,12 +23,14 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = \
     f"sqlite:///{os.path.join(basedir, 'data.sqlite')}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SECRET_KEY"] = 'mysecretkey'
 
 db = SQLAlchemy(app)
 login_manager = LoginManager()
+login_manager.init_app(app)
 
 
-from models import List, Note
+from models import List, Note, User
 
 ####################################
 DEVELOPMENT = bool(os.environ.get("FLASK_DEVELOPMENT"))
@@ -37,8 +39,8 @@ DEVELOPMENT = bool(os.environ.get("FLASK_DEVELOPMENT"))
 def base():
     if DEVELOPMENT:
         print(f"\n*{'*' * 25}\n*\n* Development mode: {DEVELOPMENT}\n*\n*{'*' * 25}\n")
-        # print(g)
-        # print(current_user)
+        print(g)
+        print(current_user)
         return send_from_directory('client/public', 'index.html')
     return render_template('index.html')
 
@@ -47,6 +49,24 @@ def base():
 def home(path):
     return send_from_directory('client/public', path)
 ####################################
+
+
+@app.route("/login", methods=["POST"])
+def user_login():
+    email = request.get_json().get("email")
+    password = request.get_json().get("password")
+    print(email)
+    print(password)
+    if not email or not password:
+        print("login failed")
+        return jsonify(success=False, message="No email or password supplied")
+    user = User.query.filter_by(email=email.lower()).first()
+    print(user)
+    if user is not None and user.verify_password(password):
+        print("login successful")
+        login_user(user)
+        return jsonify({"success":True})
+    return "What ahppened"
 
 
 @app.route("/token")
@@ -91,9 +111,7 @@ def delete_list(list_id):
     List.query.filter_by(id=list_id).delete()
     Note.query.filter_by(list_id=list_id).delete()
     db.session.commit()
-    return jsonify({
-        "success": True
-    })
+    return jsonify(success=True)
 
 
 @app.route("/addNote", methods=["POST"])

@@ -5,12 +5,12 @@ from flask import current_app, url_for
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from server import db
+from server import db, login_manager
 
 
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return User.query.get(int(user_id))
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 # Timezone adjustments
@@ -107,25 +107,28 @@ class User(db.Model, UserMixin):
         self.email = email.lower()
         self.password_hash = generate_password_hash(password)
 
-
     def __repr__(self):
-        return f"User('{self.id}', '{self.username}', '{self.email}')"
+        return f"User('{self.id}', '{self.email}')"
 
-
-    def check_password(self, password):
+    def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    @property
+    def password(self):
+        return AttributeError("Password is not a readable attribute")
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
 
     def generate_confirmation_token(self, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'],
             expiration)
         return s.dumps({'confirm': self.id}).decode('utf-8')
 
-
     def generate_reset_token(self, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'reset': self.id}).decode('utf-8')
-
 
     @staticmethod
     def reset_password(token, new_password):
@@ -142,12 +145,10 @@ class User(db.Model, UserMixin):
         db.session.commit()
         return True
 
-
     def generate_auth_token(self, expiration):
         s = Serializer(current_app.config['SECRET_KEY'],
                        expires_in=expiration)
         return s.dumps({"id": self.id}).decode('utf-8')
-
 
     @staticmethod
     def verify_auth_token(token):

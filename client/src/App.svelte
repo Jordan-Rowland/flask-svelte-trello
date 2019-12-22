@@ -1,10 +1,11 @@
 <script>
   import { onMount } from "svelte";
   import List from "./Notes/List.svelte";
+  import Login from "./Users/Login.svelte";
+
 
   onMount(() => {
     getLists();
-    getToken();
   });
 
   let lists = [];
@@ -42,7 +43,7 @@
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({name: listName, user_id=}),
+        body: JSON.stringify({name: listName, user_id: 69}),
       }
     );
     lists = [...lists, await res.json()];
@@ -63,7 +64,9 @@
 
 </script>
 
-<div class="new-list">
+<Login />
+
+<!-- <div class="new-list">
   <input type="text" name="newList" bind:value={listName} placeholder="New List Name">
   <button
     on:click={addList}>Add List</button>
@@ -76,7 +79,7 @@
       on:delete-list={deleteList} />
   {/each}
 {/if}
-</div>
+</div> -->
 
 
 <style>
