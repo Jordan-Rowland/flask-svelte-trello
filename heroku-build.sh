@@ -1,4 +1,8 @@
 
+cd client/
+npm run build
+cd ..
+
 rm -rvf ./static/*
 
 # cp client/public/index.html ./templates/
