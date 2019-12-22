@@ -1,13 +1,13 @@
 <script>
   import { onMount } from "svelte";
   import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
+
   import List from "./List.svelte";
-  let dispatch = createEventDispatcher();
 
 
   onMount(() => {
     getLists();
-    console.log("Board mounted")
   });
 
   let lists = [];
