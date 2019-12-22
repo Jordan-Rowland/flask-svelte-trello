@@ -11,7 +11,7 @@ Currently, this supports creating new lists, with simple notes that attach and s
 
 Lists will keep adding to the right and you can scroll to see them. 
 
-# UPDATE 12/20:
+## UPDATE 12/22:
 Svello now has user-logins integrated. If you do not want to sign up, and just want to see how this works, please use the following credentials:
 
 email: githubuser@noemail.com
