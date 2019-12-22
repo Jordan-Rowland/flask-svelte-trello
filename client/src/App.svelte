@@ -11,6 +11,7 @@
   let listName;
 
 
+/////////////////////
 
   let token;
 
@@ -23,7 +24,7 @@
     console.log(token);
   }
 
-
+/////////////////////
 
 
   async function getLists() {
@@ -41,7 +42,7 @@
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({name: listName}),
+        body: JSON.stringify({name: listName, user_id=}),
       }
     );
     lists = [...lists, await res.json()];

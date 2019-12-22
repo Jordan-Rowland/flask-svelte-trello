@@ -2,7 +2,7 @@ import datetime
 
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app, url_for
-# from flask_login import UserMixin
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from server import db
@@ -69,102 +69,105 @@ class List(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.Text(), index=True, nullable=False)
     notes = db.relationship("Note", backref="list")
-    # user_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
+    user_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
 
 
-    def __init__(self, name):
+    def __init__(self, name, user_id):
         self.name = name
+        self.user_id = user_id
 
     def to_json(self):
         json_list = {
             "id": self.id,
             "name": self.name,
-            # "user_id": self.user_id,
+            "user_id": self.user_id,
         }
         return json_list
 
     @staticmethod
     def from_json(json_list):
         name = json_list.get('name')
-        if name is None or name == '':
-            raise Exception('List does not have a name')
-        return List(name=name)
+        # user_id = json_list.get('user_id')
+        user_id = 69
+        if name is None or name == '' or user_id is None or user_id == '':
+            raise Exception('List does not have a name or User ID')
+        return List(name=name, user_id=user_id)
 
 
-# class User(db.Model, UserMixin):
-#     __tablename__ = 'users'
+class User(db.Model, UserMixin):
+    __tablename__ = 'users'
 
-#     id = db.Column(db.Integer(), primary_key=True)
-#     email = db.Column(db.String(64), unique=True, index=True, nullable=False)
-#     password_hash = db.Column(db.String(128), nullable=False)
-#     lists = db.relationship("List", backref="user")
-
-
-#     def __init__(self, email, password):
-#         self.email = email.lower()
-#         self.password_hash = generate_password_hash(password)
+    id = db.Column(db.Integer(), primary_key=True)
+    email = db.Column(db.String(64), unique=True, index=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    lists = db.relationship("List", backref="user")
 
 
-#     def __repr__(self):
-#         return f"User('{self.id}', '{self.username}', '{self.email}')"
+    def __init__(self, email, password):
+        self.email = email.lower()
+        self.password_hash = generate_password_hash(password)
 
 
-#     def check_password(self, password):
-#         return check_password_hash(self.password_hash, password)
+    def __repr__(self):
+        return f"User('{self.id}', '{self.username}', '{self.email}')"
 
 
-#     def generate_confirmation_token(self, expiration=3600):
-#         s = Serializer(current_app.config['SECRET_KEY'],
-#             expiration)
-#         return s.dumps({'confirm': self.id}).decode('utf-8')
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
-#     def generate_reset_token(self, expiration=3600):
-#         s = Serializer(current_app.config['SECRET_KEY'], expiration)
-#         return s.dumps({'reset': self.id}).decode('utf-8')
+    def generate_confirmation_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'],
+            expiration)
+        return s.dumps({'confirm': self.id}).decode('utf-8')
 
 
-#     @staticmethod
-#     def reset_password(token, new_password):
-#         s = Serializer(current_app.config['SECRET_KEY'])
-#         try:
-#             data = s.loads(token.encode('utf-8'))
-#         except Exception:
-#             return False
-#         user = User.query.get(data.get('reset'))
-#         if user is None:
-#             return False
-#         user.password_hash = generate_password_hash(new_password)
-#         db.session.add(user)
-#         db.session.commit()
-#         return True
+    def generate_reset_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'reset': self.id}).decode('utf-8')
 
 
-#     def generate_auth_token(self, expiration):
-#         s = Serializer(current_app.config['SECRET_KEY'],
-#                        expires_in=expiration)
-#         return s.dumps({"id": self.id}).decode('utf-8')
+    @staticmethod
+    def reset_password(token, new_password):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token.encode('utf-8'))
+        except Exception:
+            return False
+        user = User.query.get(data.get('reset'))
+        if user is None:
+            return False
+        user.password_hash = generate_password_hash(new_password)
+        db.session.add(user)
+        db.session.commit()
+        return True
 
 
-#     @staticmethod
-#     def verify_auth_token(token):
-#         s = Serializer(current_app.config['SECRET_KEY'])
-#         try:
-#             data = s.loads(token)
-#         except Exception:
-#             return None
-#         return User.query.get(data['id'])
+    def generate_auth_token(self, expiration):
+        s = Serializer(current_app.config['SECRET_KEY'],
+                       expires_in=expiration)
+        return s.dumps({"id": self.id}).decode('utf-8')
 
 
-#     @staticmethod
-#     def from_json(json_user):
-#         email = json_user.get('email')
-#         password = json_user.get('password')
-#         if (
-#                 email is None
-#                 or password is None
-#                 or email == ''
-#                 or password == ''
-#             ):
-#             raise Exception('User does not have an email or password')
-#         return User(email=email, password=password)
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except Exception:
+            return None
+        return User.query.get(data['id'])
+
+
+    @staticmethod
+    def from_json(json_user):
+        email = json_user.get('email')
+        password = json_user.get('password')
+        if (
+                email is None
+                or password is None
+                or email == ''
+                or password == ''
+            ):
+            raise Exception('User does not have an email or password')
+        return User(email=email, password=password)

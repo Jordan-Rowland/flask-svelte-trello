@@ -1,21 +1,32 @@
 import os
 
-from flask import (Flask,
-    jsonify,
-    render_template,
-    request,
-    send_from_directory)
+from flask import (
+        Flask,
+        g,
+        jsonify,
+        render_template,
+        request,
+        send_from_directory
+    )
+
+from flask_login import LoginManager, current_user
+
+
 from flask_sqlalchemy import SQLAlchemy
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
+
+
 app.config["SQLALCHEMY_DATABASE_URI"] = \
     f"sqlite:///{os.path.join(basedir, 'data.sqlite')}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+login_manager = LoginManager()
+
 
 from models import List, Note
 
@@ -25,7 +36,9 @@ DEVELOPMENT = bool(os.environ.get("FLASK_DEVELOPMENT"))
 @app.route("/")
 def base():
     if DEVELOPMENT:
-        print(f"\n{'*' * 25}\n\nDevelopment mode: {DEVELOPMENT}\n\n{'*' * 25}\n")
+        print(f"\n*{'*' * 25}\n*\n* Development mode: {DEVELOPMENT}\n*\n*{'*' * 25}\n")
+        # print(g)
+        # print(current_user)
         return send_from_directory('client/public', 'index.html')
     return render_template('index.html')
 
@@ -45,6 +58,7 @@ def get_token():
 
 @app.route("/lists")
 def get_lists():
+    # lists = List.query.filter_by(user_id=96).all()
     lists = List.query.all()
     return jsonify({
         "lists": [_list.to_json() for _list in lists]
@@ -54,7 +68,7 @@ def get_lists():
 @app.route("/addList", methods=["POST"])
 def add_list():
     new_list = List.from_json(request.get_json())
-    # new_list['user_id'] = current_user.id
+    print(new_list)
     db.session.add(new_list)
     db.session.commit()
     return jsonify(new_list.to_json()), 201
