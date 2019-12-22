@@ -10,7 +10,7 @@
   export let id;
   export let name;
 
-  let notes;
+  let notes = [];
   let newNote;
 
   onMount(() => {
@@ -37,6 +37,7 @@
         body: JSON.stringify({body: newNote, list_id: id}),
       }
     );
+    console.log(notes);
     notes = [await res.json(), ...notes];
     newNote = "";
   }

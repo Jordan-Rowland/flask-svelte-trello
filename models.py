@@ -87,8 +87,7 @@ class List(db.Model):
     @staticmethod
     def from_json(json_list):
         name = json_list.get('name')
-        # user_id = json_list.get('user_id')
-        user_id = 69
+        user_id = json_list.get('user_id')
         if name is None or name == '' or user_id is None or user_id == '':
             raise Exception('List does not have a name or User ID')
         return List(name=name, user_id=user_id)

@@ -9,8 +9,7 @@ from flask import (
         send_from_directory
     )
 
-from flask_login import LoginManager, current_user, login_user
-
+from flask_login import LoginManager, current_user, login_user, logout_user
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -39,8 +38,9 @@ DEVELOPMENT = bool(os.environ.get("FLASK_DEVELOPMENT"))
 def base():
     if DEVELOPMENT:
         print(f"\n*{'*' * 25}\n*\n* Development mode: {DEVELOPMENT}\n*\n*{'*' * 25}\n")
-        print(g)
-        print(current_user)
+        print(f"g: {g}")
+        if current_user:
+            print(f"current user: {current_user}")
         return send_from_directory('client/public', 'index.html')
     return render_template('index.html')
 
@@ -55,31 +55,24 @@ def home(path):
 def user_login():
     email = request.get_json().get("email")
     password = request.get_json().get("password")
-    print(email)
-    print(password)
     if not email or not password:
-        print("login failed")
-        return jsonify(success=False, message="No email or password supplied")
+        return jsonify(success=False, message="no email or password supplied")
     user = User.query.filter_by(email=email.lower()).first()
-    print(user)
     if user is not None and user.verify_password(password):
-        print("login successful")
         login_user(user)
-        return jsonify({"success":True})
-    return "What ahppened"
+        return jsonify(success=True)
+    return jsonify(success=False)
 
 
-@app.route("/token")
-def get_token():
-    return jsonify({
-        "token": "access_token_11295"
-    })
+@app.route("/logout")
+def user_logout():
+    logout_user()
+    return jsonify(success=True, message="successfully logged out")
 
 
 @app.route("/lists")
 def get_lists():
-    # lists = List.query.filter_by(user_id=96).all()
-    lists = List.query.all()
+    lists = List.query.filter_by(user_id=current_user.id).all()
     return jsonify({
         "lists": [_list.to_json() for _list in lists]
     })
@@ -88,7 +81,6 @@ def get_lists():
 @app.route("/addList", methods=["POST"])
 def add_list():
     new_list = List.from_json(request.get_json())
-    print(new_list)
     db.session.add(new_list)
     db.session.commit()
     return jsonify(new_list.to_json()), 201
@@ -100,7 +92,7 @@ def get_notes(list_id):
         list_id=list_id).order_by(
         Note.timestamp.desc()).all()
     if not notes:
-        return jsonify(status="This list was deleted")
+        return jsonify(status="this list is emptry or was deleted", notes=[])
     return jsonify({
         "notes": [note.to_json() for note in notes]
     })

@@ -3,6 +3,7 @@
   import List from "./Notes/List.svelte";
   import Login from "./Users/Login.svelte";
 
+  let loggedIn = false;
 
   onMount(() => {
     getLists();
@@ -12,27 +13,11 @@
   let listName;
 
 
-/////////////////////
-
-  let token;
-
-    async function getToken() {
-    console.log("getToken called");
-    const res = await fetch(
-      "/token");
-    const resJson = await res.json();
-    token = resJson.token;
-    console.log(token);
-  }
-
-/////////////////////
-
-
   async function getLists() {
     const res = await fetch(
       "/lists");
-    const resJson = await res.json();
-    lists = resJson.lists;
+    const response = await res.json();
+    lists = response.lists;
   }
 
   async function addList() {
@@ -43,7 +28,7 @@
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({name: listName, user_id: 69}),
+        body: JSON.stringify({name: listName, user_id: 1}),
       }
     );
     lists = [...lists, await res.json()];
@@ -62,24 +47,43 @@
     lists = updatedLists;
   }
 
+
+  async function logoutUser() {
+    loggedIn = false;
+    console.log("LOGGING OUT");
+    const res = await fetch(`/logout`);
+    const response = await res.json();
+    console.log(response);
+  }
+
 </script>
 
-<Login />
+{#if !loggedIn}
+  <Login on:login-user={(event) => {
+    console.log(event.detail)
+    loggedIn = event.detail.success
+  }
+} />
+{:else}
+  <div class="new-list">
+    <input type="text" name="newList" bind:value={listName} placeholder="New List Name">
+    <button
+      on:click={addList}>Add List</button>
+    <div class="logout-button">
+      <button
+        on:click={logoutUser}>Log Out</button>
+    </div>
+  </div>
 
-<!-- <div class="new-list">
-  <input type="text" name="newList" bind:value={listName} placeholder="New List Name">
-  <button
-    on:click={addList}>Add List</button>
-</div>
-
-<div class="column">
-{#if lists}
-  {#each lists as list, index (list.id)}
-    <List name={list.name} id={list.id}
-      on:delete-list={deleteList} />
-  {/each}
+  <div class="column">
+  {#if lists}
+    {#each lists as list, index (list.id)}
+      <List name={list.name} id={list.id}
+        on:delete-list={deleteList} />
+    {/each}
+  {/if}
+  </div>
 {/if}
-</div> -->
 
 
 <style>
@@ -118,6 +122,11 @@
 
 button:hover {
   cursor: pointer;
+}
+
+.logout-button {
+  position: absolute;
+  right: 0.35rem;
 }
 
 </style>
