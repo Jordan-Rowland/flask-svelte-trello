@@ -7,8 +7,6 @@
   let errorMessage;
   let errorShow;
 
-  $: console.log(errorShow);
-
 
   let email;
   let password;
@@ -61,6 +59,7 @@
       errorShow = true;
       return false;
     }
+    errorShow = false;
     dispatch("login-user", response);
   }
 

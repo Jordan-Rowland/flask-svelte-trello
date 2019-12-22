@@ -1,6 +1,6 @@
 <script>
   import { slide } from 'svelte/transition';
-  import { circInOut } from 'svelte/easing';
+  import { circIn } from 'svelte/easing';
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
@@ -17,7 +17,7 @@
 
 {#if show}
 <div class="container"
-  transition:slide="{{delay: 100, duration: 300, easing: circInOut}}">
+  in:slide="{{delay: 100, duration: 300, easing: circIn}}">
   <div class="error">
     <span class="error-close"
       on:click={closeError}>X</span>

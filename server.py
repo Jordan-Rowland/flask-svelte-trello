@@ -24,13 +24,15 @@ from flask_sqlalchemy import SQLAlchemy
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
+DEVELOPMENT = bool(os.environ.get("FLASK_DEVELOPMENT"))
 
 
-
-app.config["SQLALCHEMY_DATABASE_URI"] = \
-    f"sqlite:///{os.path.join(basedir, 'data.sqlite')}"
+if DEVELOPMENT:
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{os.path.join(basedir, 'data.sqlite')}"
+else:
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SECRET_KEY"] = 'mysecretkey'
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or 'mysecretkey'
 
 db = SQLAlchemy(app)
 login_manager = LoginManager()
@@ -40,7 +42,6 @@ login_manager.init_app(app)
 from models import List, Note, User
 
 ####################################
-DEVELOPMENT = bool(os.environ.get("FLASK_DEVELOPMENT"))
 
 @app.route("/")
 def base():
