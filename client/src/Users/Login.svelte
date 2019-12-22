@@ -4,7 +4,9 @@
 
   let email = "jordanrowland00@gmail.com";
   let password = "mypassword";
+  let confirmPassword;
   let login = true;
+
 
   async function loginUser() {
     const res = await fetch(
@@ -19,7 +21,35 @@
     );
     const response = await res.json();
     if (!response.success) {
+      console.log("Login or signup failed");
+      return false;
+      // Throw error
+    }
+    dispatch("login-user", response);
+  }
 
+
+  async function signUpUser() {
+    if (password !== confirmPassword) {
+      console.log("Passwords dont match");
+      // Throw error
+      return false;
+    }
+    const res = await fetch(
+      "/signup", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({email: email, password: password}),
+      }
+    );
+    const response = await res.json();
+    if (!response.success) {
+      console.log("Login or signup failed");
+      // Throw error
+      return false;
     }
     dispatch("login-user", response);
   }
@@ -39,17 +69,35 @@
 <form>
 <label>
 Email<br>
-<input type="text" name="email" bind:value={email}>
+<input type="email" name="email" bind:value={email}>
 </label>
 
 <label>
 Password<br>
 <input type="password" name="password" bind:value={password}>
 </label>
+
+{#if !login}
+<label>
+Confirm Password<br>
+<input type="password" name="cPassword" bind:value={confirmPassword}>
+</label>
+
+<button type="submit"
+  on:click|preventDefault={signUpUser}>
+  Sign Up
+</button>
+{:else}
 <button type="submit"
   on:click|preventDefault={loginUser}>
   Login
 </button>
+{/if}
+
+<label>
+Login
+<input type="checkbox" name="login" bind:checked={login}>
+</label>
 
 </form>
 </div>

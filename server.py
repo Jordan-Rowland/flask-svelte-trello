@@ -70,6 +70,18 @@ def user_logout():
     return jsonify(success=True, message="successfully logged out")
 
 
+@app.route("/signup", methods=["POST"])
+def user_signup():
+    email = request.get_json().get("email")
+    password = request.get_json().get("password")
+    user = User.query.filter_by(email=email.lower())
+    if user is None:
+        return jsonify(success=False, message="email already exists")
+    user = User(email.lower(), password)
+    login_user(user)
+    return jsonify(success=True, message="successfully signed up")
+
+
 @app.route("/lists")
 def get_lists():
     lists = List.query.filter_by(user_id=current_user.id).all()
