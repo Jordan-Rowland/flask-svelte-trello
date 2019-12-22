@@ -4,12 +4,20 @@ from flask import (
         Flask,
         g,
         jsonify,
+        redirect,
         render_template,
         request,
-        send_from_directory
+        send_from_directory,
+        url_for,
     )
 
-from flask_login import LoginManager, current_user, login_user, logout_user
+from flask_login import (
+        AnonymousUserMixin,
+        LoginManager,
+        current_user,
+        login_user,
+        logout_user,
+    )
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -39,8 +47,9 @@ def base():
     if DEVELOPMENT:
         print(f"\n*{'*' * 25}\n*\n* Development mode: {DEVELOPMENT}\n*\n*{'*' * 25}\n")
         print(f"g: {g}")
-        if current_user:
-            print(f"current user: {current_user}")
+        if isinstance(current_user, AnonymousUserMixin):
+            print("No user logged in")
+        # print(f"current user: {current_user}")
         return send_from_directory('client/public', 'index.html')
     return render_template('index.html')
 
@@ -51,13 +60,23 @@ def home(path):
 ####################################
 
 
+@app.route("/checkLogin")
+def check_login():
+    if not current_user.is_authenticated:
+        return jsonify(logged_in=False)
+    return jsonify(logged_in=True)
+
+
 @app.route("/login", methods=["POST"])
 def user_login():
     email = request.get_json().get("email")
     password = request.get_json().get("password")
+    print(email)
+    print(password)
     if not email or not password:
         return jsonify(success=False, message="no email or password supplied")
     user = User.query.filter_by(email=email.lower()).first()
+    print(user)
     if user is not None and user.verify_password(password):
         login_user(user)
         return jsonify(success=True)
@@ -74,10 +93,14 @@ def user_logout():
 def user_signup():
     email = request.get_json().get("email")
     password = request.get_json().get("password")
-    user = User.query.filter_by(email=email.lower())
-    if user is None:
+    user_exists = User.query.filter_by(email=email.lower()).first()
+    print(email)
+    if user_exists:
         return jsonify(success=False, message="email already exists")
     user = User(email.lower(), password)
+    db.session.add(user)
+    db.session.commit()
+    print(user)
     login_user(user)
     return jsonify(success=True, message="successfully signed up")
 
@@ -92,7 +115,9 @@ def get_lists():
 
 @app.route("/addList", methods=["POST"])
 def add_list():
-    new_list = List.from_json(request.get_json())
+    name = request.get_json().get("name")
+    user_id = current_user.id
+    new_list = List(name, user_id)
     db.session.add(new_list)
     db.session.commit()
     return jsonify(new_list.to_json()), 201

@@ -1,9 +1,22 @@
 <script>
+  import { onMount } from "svelte";
   import Login from "./Users/Login.svelte";
-  import Board from "./Board.svelte";
+  import Board from "./Board/Board.svelte";
 
 
   let loggedIn;
+
+
+  onMount(async () => {
+    const res = await fetch(
+      "/checkLogin");
+    const response = await res.json();
+    if (response.logged_in) {
+      loggedIn = true;
+    } else {
+      loggedIn = false;
+    }
+  });
 
 
   async function logoutUser() {
@@ -14,11 +27,13 @@
 
 </script>
 
-{#if !loggedIn}
+{#if loggedIn == false}
   <Login
     on:login-user={(event) => loggedIn = event.detail.success} />
-{:else}
+{:else if loggedIn}
   <Board on:logout-user={logoutUser} />
+{:else}
+ <div></div>
 {/if}
 
 

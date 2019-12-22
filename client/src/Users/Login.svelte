@@ -2,10 +2,12 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
-  let email = "jordanrowland00@gmail.com";
-  let password = "mypassword";
+  let email;
+  let password;
   let confirmPassword;
   let login = true;
+
+  $: console.log(email);
 
 
   async function loginUser() {

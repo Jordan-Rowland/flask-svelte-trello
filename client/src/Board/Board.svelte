@@ -1,13 +1,13 @@
 <script>
   import { onMount } from "svelte";
   import { createEventDispatcher } from "svelte";
-  import List from "./Notes/List.svelte";
-  import Login from "./Users/Login.svelte";
+  import List from "./List.svelte";
   let dispatch = createEventDispatcher();
 
 
   onMount(() => {
     getLists();
+    console.log("Board mounted")
   });
 
   let lists = [];
@@ -30,7 +30,7 @@
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({name: listName, user_id: 1}),
+        body: JSON.stringify({name: listName}),
       }
     );
     lists = [...lists, await res.json()];
