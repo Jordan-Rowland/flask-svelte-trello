@@ -128,11 +128,9 @@ def add_list():
 @app.route("/list/<int:list_id>/notes")
 @login_required
 def get_notes(list_id):
-    # notes = Note.query.filter_by(
-    #     list_id=list_id).order_by(
-    #     Note.timestamp.desc()).all()
-
-    notes = Note.query.filter_by(list_id=list_id).all()
+    notes = Note.query.filter_by(
+        list_id=list_id).order_by(
+        Note.timestamp.desc()).all()
     print(notes)
     if notes is None:
         return jsonify(status="this list was deleted")
