@@ -15,6 +15,7 @@ from flask_login import (
         AnonymousUserMixin,
         LoginManager,
         current_user,
+        login_required,
         login_user,
         logout_user,
     )
@@ -72,12 +73,9 @@ def check_login():
 def user_login():
     email = request.get_json().get("email")
     password = request.get_json().get("password")
-    print(email)
-    print(password)
     if not email or not password:
         return jsonify(success=False, message="no email or password supplied")
     user = User.query.filter_by(email=email.lower()).first()
-    print(user)
     if user is not None and user.verify_password(password):
         login_user(user)
         return jsonify(success=True)
@@ -85,6 +83,7 @@ def user_login():
 
 
 @app.route("/logout")
+@login_required
 def user_logout():
     logout_user()
     return jsonify(success=True, message="successfully logged out")
@@ -107,6 +106,7 @@ def user_signup():
 
 
 @app.route("/lists")
+@login_required
 def get_lists():
     lists = List.query.filter_by(user_id=current_user.id).all()
     return jsonify({
@@ -115,6 +115,7 @@ def get_lists():
 
 
 @app.route("/addList", methods=["POST"])
+@login_required
 def add_list():
     name = request.get_json().get("name")
     user_id = current_user.id
@@ -125,18 +126,18 @@ def add_list():
 
 
 @app.route("/list/<int:list_id>/notes")
+@login_required
 def get_notes(list_id):
     notes = Note.query.filter_by(
         list_id=list_id).order_by(
         Note.timestamp.desc()).all()
-    if not notes:
-        return jsonify(status="this list is emptry or was deleted", notes=[])
     return jsonify({
         "notes": [note.to_json() for note in notes]
     })
 
 
 @app.route("/deleteList/<int:list_id>", methods=["DELETE"])
+@login_required
 def delete_list(list_id):
     List.query.filter_by(id=list_id).delete()
     Note.query.filter_by(list_id=list_id).delete()
@@ -145,6 +146,7 @@ def delete_list(list_id):
 
 
 @app.route("/addNote", methods=["POST"])
+@login_required
 def add_note():
     note = Note.from_json(request.get_json())
     db.session.add(note)
@@ -153,6 +155,7 @@ def add_note():
 
 
 @app.route("/deleteNote/<int:note_id>", methods=["DELETE"])
+@login_required
 def delete_note(note_id):
     Note.query.filter_by(id=note_id).delete()
     db.session.commit()
@@ -162,7 +165,4 @@ def delete_note(note_id):
 
 
 if __name__ == "__main__":
-    if DEVELOPMENT:
-        app.run(debug=True, port=3000)
-    else:
-        app.run(port=3000)
+    app.run(port=3000)

@@ -27,9 +27,9 @@
     );
     const response = await res.json();
     if (!response.success) {
-      console.log("Login or signup failed");
+      errorMessage = "Login failed";
+      errorShow = true;
       return false;
-      // Throw error
     }
     dispatch("login-user", response);
   }
