@@ -48,10 +48,6 @@ from models import List, Note, User
 def base():
     if DEVELOPMENT:
         print(f"\n*{'*' * 25}\n*\n* Development mode: {DEVELOPMENT}\n*\n*{'*' * 25}\n")
-        print(f"g: {g}")
-        if isinstance(current_user, AnonymousUserMixin):
-            print("No user logged in")
-        print(f"current user: User(id: {current_user.id}, email: {current_user.email}")
         return send_from_directory('client/public', 'index.html')
     return render_template('index.html')
 
@@ -61,12 +57,15 @@ def home(path):
     return send_from_directory('client/public', path)
 ####################################
 
+# TODO: Add more 'success' json back to make error handling better
 
 @app.route("/checkLogin")
 def check_login():
-    if not current_user.is_authenticated:
-        return jsonify(logged_in=False)
-    return jsonify(logged_in=True)
+    if current_user.is_authenticated:
+        print(f"current user: User(id: {current_user.id}, email: {current_user.email})")
+        return jsonify(logged_in=True)
+    print("No user logged in")
+    return jsonify(logged_in=False)
 
 
 @app.route("/login", methods=["POST"])
@@ -99,6 +98,7 @@ def user_signup():
     user_exists = User.query.filter_by(email=email.lower()).first()
     if user_exists:
         return jsonify(success=False, message="email already exists")
+    # TODO:
     # Some authentication if email = None ?
     user = User(email.lower(), password)
     db.session.add(user)
@@ -120,32 +120,18 @@ def get_lists():
 @login_required
 def add_list():
     name = request.get_json().get("name")
+    if not name:
+        return jsonify(
+            success=False,
+            message="must provide a list name"
+        ), 404
     user_id = current_user.id
     new_list = List(name, user_id)
     db.session.add(new_list)
     db.session.commit()
-    return jsonify(new_list.to_json())
-
-
-@app.route("/list/<int:list_id>/notes")
-@login_required
-def get_notes(list_id):
-    query = [
-        list
-        for list in current_user.lists
-        if list.id == list_id
-    ]
-    if not query:
-        return jsonify(
-            success=False,
-            message=(
-                "this list does not exist or you are "
-                "not authorized to take this action"
-            )
-        ), 404
-    notes = query[0].notes
     return jsonify(
-        notes=[note.to_json() for note in notes]
+        success=False
+        list=new_list.to_json()
     )
 
 
@@ -167,6 +153,28 @@ def delete_list(list_id):
     return jsonify(
         success=True,
         message=f"list {list_id} deleted"
+    )
+
+
+@app.route("/list/<int:list_id>/notes")
+@login_required
+def get_notes(list_id):
+    query = [
+        list
+        for list in current_user.lists
+        if list.id == list_id
+    ]
+    if not query:
+        return jsonify(
+            success=False,
+            message=(
+                "this list does not exist or you are "
+                "not authorized to take this action"
+            )
+        ), 404
+    notes = query[0].notes
+    return jsonify(
+        notes=[note.to_json() for note in notes]
     )
 
 

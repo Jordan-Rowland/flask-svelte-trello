@@ -37,7 +37,6 @@
 
   async function signUpUser() {
     if (password !== confirmPassword) {
-      // console.log("Passwords dont match");
       errorMessage = "Passwords do not match";
       errorShow = true;
       return false;
@@ -54,7 +53,6 @@
     );
     const response = await res.json();
     if (!response.success) {
-      // console.log("Login or signup failed");
       errorMessage = response.message;
       errorShow = true;
       return false;
