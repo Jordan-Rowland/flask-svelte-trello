@@ -22,8 +22,6 @@ from flask_login import (
 
 from flask_sqlalchemy import SQLAlchemy
 
-from helpers import auth_user
-
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
@@ -53,7 +51,7 @@ def base():
         print(f"g: {g}")
         if isinstance(current_user, AnonymousUserMixin):
             print("No user logged in")
-        # print(f"current user: {current_user}")
+        print(f"current user: User(id: {current_user.id}, email: {current_user.email}")
         return send_from_directory('client/public', 'index.html')
     return render_template('index.html')
 
@@ -88,7 +86,10 @@ def user_login():
 @login_required
 def user_logout():
     logout_user()
-    return jsonify(success=True, message="successfully logged out")
+    return jsonify(
+        success=True,
+        message="successfully logged out"
+    )
 
 
 @app.route("/signup", methods=["POST"])
@@ -96,13 +97,12 @@ def user_signup():
     email = request.get_json().get("email")
     password = request.get_json().get("password")
     user_exists = User.query.filter_by(email=email.lower()).first()
-    print(email)
     if user_exists:
         return jsonify(success=False, message="email already exists")
+    # Some authentication if email = None ?
     user = User(email.lower(), password)
     db.session.add(user)
     db.session.commit()
-    print(user)
     login_user(user)
     return jsonify(success=True, message="successfully signed up")
 
@@ -111,9 +111,9 @@ def user_signup():
 @login_required
 def get_lists():
     lists = List.query.filter_by(user_id=current_user.id).all()
-    return jsonify({
-        "lists": [_list.to_json() for _list in lists]
-    })
+    return jsonify(
+        lists=[list.to_json() for list in lists]
+    )
 
 
 @app.route("/addList", methods=["POST"])
@@ -124,55 +124,99 @@ def add_list():
     new_list = List(name, user_id)
     db.session.add(new_list)
     db.session.commit()
-    return jsonify(new_list.to_json()), 201
+    return jsonify(new_list.to_json())
 
 
 @app.route("/list/<int:list_id>/notes")
 @login_required
 def get_notes(list_id):
-    user_lists = List.query.filter(List.user_id == current_user.id).all()
     query = [
         list
-        for list in user_lists
+        for list in current_user.lists
         if list.id == list_id
     ]
     if not query:
         return jsonify(
             success=False,
-            message="This list does not exist or you are not authorized to view it"
-        )
+            message=(
+                "this list does not exist or you are "
+                "not authorized to take this action"
+            )
+        ), 404
     queried_list = query[0]
-    return jsonify({
-        "notes": [note.to_json() for note in queried_list.notes]
-    })
+    return jsonify(
+        notes=[note.to_json() for note in queried_list.notes]
+    )
 
 
 @app.route("/deleteList/<int:list_id>", methods=["DELETE"])
 @login_required
 def delete_list(list_id):
+    user_lists = [list.id for list in current_user.lists]
+    if list_id not in user_lists:
+        return jsonify(
+            success=False,
+            message=(
+                "this list does not exist or you are "
+                "not authorized to take this action"
+            )
+        ), 404
     Note.query.filter_by(list_id=list_id).delete()
     List.query.filter_by(id=list_id).delete()
     db.session.commit()
-    return jsonify(success=True)
+    return jsonify(
+        success=True,
+        message=f"list {list_id} deleted"
+    )
 
 
 @app.route("/addNote", methods=["POST"])
 @login_required
 def add_note():
-    note = Note.from_json(request.get_json())
+    new_note = request.get_json()
+    list_id = new_note.get("list_id")
+    if not list_id:
+        return jsonify(
+            success=False,
+            message=(
+                "no list id provided"
+            )
+        ), 400
+    user_lists = [list.id for list in current_user.lists]
+    if list_id not in user_lists:
+        return jsonify(
+            success=False,
+            message=(
+                "this list does not exist or you are "
+                "not authorized to take this action"
+            )
+        ), 404
+    note = Note.from_json(new_note)
     db.session.add(note)
     db.session.commit()
     return jsonify(note.to_json()), 201
 
 
-@app.route("/deleteNote/<int:note_id>", methods=["DELETE"])
+@app.route("/<int:list_id>/deleteNote/<int:note_id>", methods=["DELETE"])
 @login_required
-def delete_note(note_id):
+def delete_note(list_id, note_id):
+    user_lists = [list.id for list in current_user.lists]
+    if list_id not in user_lists:
+        return jsonify(
+            success=False,
+            message=(
+                "this list does not exist or you are "
+                "not authorized to take this action"
+            )
+        ), 404
     Note.query.filter_by(id=note_id).delete()
     db.session.commit()
-    return jsonify({
-        "success": True
-    })
+    return jsonify(
+        success=True,
+        message=(
+            f"note {note_id} deleted from list {list_id}"
+        )
+    )
 
 
 if __name__ == "__main__":

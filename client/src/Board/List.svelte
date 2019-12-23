@@ -37,7 +37,7 @@
         body: JSON.stringify({body: newNote, list_id: id}),
       }
     );
-    notes = [await res.json(), ...notes];
+    notes = [...notes, await res.json()];
     newNote = "";
   }
 
@@ -45,7 +45,7 @@
   async function deleteNote(event) {
     const selectedId = event.detail;
     const res = await fetch(
-      `/deleteNote/${selectedId}`, {method: "DELETE"}
+      `/${id}/deleteNote/${selectedId}`, {method: "DELETE"}
     );
     let updatedNotes = notes.filter(
       note => note.id !== selectedId
