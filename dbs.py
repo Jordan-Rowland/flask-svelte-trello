@@ -2,8 +2,9 @@ from server import db
 from models import List, Note, User
 
 
-db.session.query(Note).filter(User.id == 1).filter(List.id == 2).all()
+# db.session.query(Note).filter(User.id == 1).filter(List.id == 2).all()
 
+u = Users.query.all()
 
 n = Note.query.all()
 l = List.query.all()

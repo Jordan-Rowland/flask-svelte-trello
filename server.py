@@ -143,9 +143,9 @@ def get_notes(list_id):
                 "not authorized to take this action"
             )
         ), 404
-    queried_list = query[0]
+    notes = query[0].notes
     return jsonify(
-        notes=[note.to_json() for note in queried_list.notes]
+        notes=[note.to_json() for note in notes]
     )
 
 
