@@ -22,6 +22,8 @@ from flask_login import (
 
 from flask_sqlalchemy import SQLAlchemy
 
+from helpers import auth_user
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
@@ -128,19 +130,28 @@ def add_list():
 @app.route("/list/<int:list_id>/notes")
 @login_required
 def get_notes(list_id):
-    notes = Note.query.filter_by(
-        list_id=list_id).order_by(
-        Note.timestamp.desc()).all()
+    user_lists = List.query.filter(List.user_id == current_user.id).all()
+    query = [
+        list
+        for list in user_lists
+        if list.id == list_id
+    ]
+    if not query:
+        return jsonify(
+            success=False,
+            message="This list does not exist or you are not authorized to view it"
+        )
+    queried_list = query[0]
     return jsonify({
-        "notes": [note.to_json() for note in notes]
+        "notes": [note.to_json() for note in queried_list.notes]
     })
 
 
 @app.route("/deleteList/<int:list_id>", methods=["DELETE"])
 @login_required
 def delete_list(list_id):
-    List.query.filter_by(id=list_id).delete()
     Note.query.filter_by(list_id=list_id).delete()
+    List.query.filter_by(id=list_id).delete()
     db.session.commit()
     return jsonify(success=True)
 

@@ -40,6 +40,9 @@ class Note(db.Model):
         self.body = body
         self.list_id = list_id
 
+    def __repr__(self):
+        return f"Note(id: {self.id}, body: {self.body}, list_id: {self.list_id})"
+
     def to_json(self):
         json_note = {
             "id": self.id,
@@ -76,6 +79,9 @@ class List(db.Model):
         self.name = name
         self.user_id = user_id
 
+    def __repr__(self):
+        return f"List(id: {self.id}, name: {self.name}, user_id: {self.user_id})"
+
     def to_json(self):
         json_list = {
             "id": self.id,
@@ -107,7 +113,7 @@ class User(db.Model, UserMixin):
         self.password_hash = generate_password_hash(password)
 
     def __repr__(self):
-        return f"User('{self.id}', '{self.email}')"
+        return f"User(id: {self.id}, email: {self.email})"
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)

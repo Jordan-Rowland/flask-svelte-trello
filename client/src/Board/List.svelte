@@ -37,7 +37,6 @@
         body: JSON.stringify({body: newNote, list_id: id}),
       }
     );
-    console.log(notes);
     notes = [await res.json(), ...notes];
     newNote = "";
   }
