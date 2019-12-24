@@ -33,6 +33,14 @@
         body: JSON.stringify({name: listName}),
       }
     );
+    responst = await res.json();
+    if (!resonse.success) {
+      // TODO:
+      // Add error here!
+      // errorMessage = "Login failed";
+      // errorShow = true;
+      return false;
+    }
     lists = [...lists, await res.json()];
     listName = "";
   }
