@@ -2,11 +2,6 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
-  import Error from "../UI/Error.svelte";
-
-  let errorMessage;
-  let errorShow;
-
 
   let email;
   let password;
@@ -27,8 +22,7 @@
     );
     const response = await res.json();
     if (!response.success) {
-      errorMessage = "Login failed";
-      errorShow = true;
+      dispatch("display-error", response.message);
       return false;
     }
     dispatch("login-user", response);
@@ -37,8 +31,7 @@
 
   async function signUpUser() {
     if (password !== confirmPassword) {
-      errorMessage = "Passwords do not match";
-      errorShow = true;
+      dispatch("display-error", "Passwords do not match")
       return false;
     }
     const res = await fetch(
@@ -53,8 +46,7 @@
     );
     const response = await res.json();
     if (!response.success) {
-      errorMessage = response.message;
-      errorShow = true;
+      dispatch("display-error", response.message);
       return false;
     }
     errorShow = false;
@@ -109,9 +101,6 @@ Login
 </form>
 </div>
 </div>
-
-<Error show={errorShow} message={errorMessage}
-  on:close-error={() => errorShow = false} />
 
 
 <style>
