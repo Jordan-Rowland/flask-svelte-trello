@@ -7,6 +7,7 @@
 
   import Note from "./Note.svelte";
 
+
   export let id;
   export let name;
 
@@ -21,8 +22,12 @@
   async function getNotes() {
     const res = await fetch(
       `/list/${id}/notes`);
-    const resJson = await res.json();
-    notes = resJson.notes;
+    const response = await res.json();
+    if (!response.success) {
+      dispatch("display-error", response.message);
+      return false;
+    }
+    notes = response.notes;
   }
 
 
@@ -37,6 +42,11 @@
         body: JSON.stringify({body: newNote, list_id: id}),
       }
     );
+    const response = await res.json();
+    if (!response.success) {
+      dispatch("display-list-error", response.message);
+      return false;
+    }
     notes = [...notes, await res.json()];
     newNote = "";
   }
@@ -47,7 +57,7 @@
     const res = await fetch(
       `/${id}/deleteNote/${selectedId}`, {method: "DELETE"}
     );
-    let updatedNotes = notes.filter(
+    const updatedNotes = notes.filter(
       note => note.id !== selectedId
     );
     notes = updatedNotes;

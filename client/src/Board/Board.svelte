@@ -33,15 +33,12 @@
         body: JSON.stringify({name: listName}),
       }
     );
-    responst = await res.json();
-    if (!resonse.success) {
-      // TODO:
-      // Add error here!
-      // errorMessage = "Login failed";
-      // errorShow = true;
+    const response = await res.json();
+    if (!response.success) {
+      dispatch("display-error", response.message);
       return false;
     }
-    lists = [...lists, await res.json()];
+    lists = [...lists, response.list];
     listName = "";
   }
 
@@ -51,7 +48,12 @@
     const res = await fetch(
       `/deleteList/${selectedId}`, {method: "DELETE"}
     );
-    let updatedLists = lists.filter(
+    const response = await res.json();
+    if (!response.success) {
+      dispatch("display-error", response.message);
+      return false;
+    }
+    const updatedLists = lists.filter(
       list => list.id !== selectedId
     );
     lists = updatedLists;
@@ -63,6 +65,7 @@
     const res = await fetch(`/logout`);
     const response = await res.json();
   }
+
 
 </script>
 
@@ -80,7 +83,8 @@
   {#if lists}
     {#each lists as list, index (list.id)}
       <List name={list.name} id={list.id}
-        on:delete-list={deleteList} />
+        on:delete-list={deleteList}
+        on:display-list-error={event => dispatch("display-error", event.detail)} />
     {/each}
   {/if}
   </div>

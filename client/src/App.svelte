@@ -2,6 +2,10 @@
   import { onMount } from "svelte";
   import Login from "./Users/Login.svelte";
   import Board from "./Board/Board.svelte";
+  import Error from "./UI/Error.svelte";
+
+  let errorMessage;
+  let errorShow;
 
 
   let loggedIn;
@@ -25,17 +29,26 @@
     const response = await res.json();
   }
 
+  function displayError(event) {
+    errorMessage = event.detail;
+    errorShow = true;
+  }
+
 </script>
 
 {#if loggedIn == false}
   <Login
-    on:login-user={(event) => loggedIn = event.detail.success} />
+    on:login-user={(event) => loggedIn = event.detail.success}
+    on:display-error={displayError}/>
 {:else if loggedIn}
-  <Board on:logout-user={logoutUser} />
+  <Board on:logout-user={logoutUser}
+  on:display-error={displayError}/>
 {:else}
  <div></div>
 {/if}
 
+<Error show={errorShow} message={errorMessage}
+  on:close-error={() => errorShow = false} />
 
 <style>
 
