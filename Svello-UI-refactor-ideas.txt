@@ -1,0 +1,24 @@
+Svello UI refactor
+
+
+- New list option shows after current lists:
+    - Clicking on this brings up the text area for the list name + add-list button
+
+- New card option shows after current cards:
+    - Clicking on this brings up the text area for the card name + add-card button
+
+- Card min size smaller, max size larger
+    - fixed width smaller
+
+- Lists closer together
+
+- Edit button on side of cards
+    - Button only appears on hover
+
+- Add-list separate component??
+
+- Drop-Down menu for lists
+
+- Edit card modal
+
+
