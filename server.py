@@ -28,8 +28,7 @@ DEVELOPMENT = bool(os.environ.get("FLASK_DEVELOPMENT"))
 
 
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    os.environ.get("DATABASE_URL")
-    or f"sqlite:///{os.path.join(basedir, 'data.sqlite')}"
+    os.environ.get("DATABASE_URL") or f"sqlite:///{os.path.join(basedir, 'data.sqlite')}"
 )
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -137,8 +136,7 @@ def delete_list(list_id):
             jsonify(
                 success=False,
                 message=(
-                    "this list does not exist or you are "
-                    "not authorized to take this action"
+                    "this list does not exist or you are not authorized to take this action"
                 ),
             ),
             401,
@@ -158,14 +156,13 @@ def get_notes(list_id):
             jsonify(
                 success=False,
                 message=(
-                    "this list does not exist or you are "
-                    "not authorized to take this action"
+                    "this list does not exist or you are not authorized to take this action"
                 ),
             ),
             401,
         )
     notes = query[0].notes
-    return jsonify(notes=[note.to_json() for note in notes])
+    return jsonify(success=True, notes=[note.to_json() for note in notes])
 
 
 @app.route("/addNote", methods=["POST"])
@@ -173,8 +170,9 @@ def get_notes(list_id):
 def add_note():
     new_note = request.get_json()
     list_id = new_note.get("list_id")
-    name = new_note.get("name")
-    if not list_id or not name:
+    body = new_note.get("body")
+    print(body, list_id)
+    if not list_id or not body:
         return jsonify(success=False, message=("missing note information")), 400
     user_lists = [list.id for list in current_user.lists]
     if list_id not in user_lists:
@@ -182,8 +180,7 @@ def add_note():
             jsonify(
                 success=False,
                 message=(
-                    "this list does not exist or you are "
-                    "not authorized to take this action"
+                    "this list does not exist or you are not authorized to take this action"
                 ),
             ),
             401,
@@ -191,7 +188,7 @@ def add_note():
     note = Note.from_json(new_note)
     db.session.add(note)
     db.session.commit()
-    return jsonify(note.to_json()), 201
+    return jsonify(success=True, note=note.to_json()), 201
 
 
 @app.route("/<int:list_id>/deleteNote/<int:note_id>", methods=["DELETE"])
@@ -203,17 +200,14 @@ def delete_note(list_id, note_id):
             jsonify(
                 success=False,
                 message=(
-                    "this list does not exist or you are "
-                    "not authorized to take this action"
+                    "this list does not exist or you are not authorized to take this action"
                 ),
             ),
             401,
         )
     Note.query.filter_by(id=note_id).delete()
     db.session.commit()
-    return jsonify(
-        success=True, message=(f"note {note_id} deleted from list {list_id}")
-    )
+    return jsonify(success=True, message=(f"note {note_id} deleted from list {list_id}"))
 
 
 if __name__ == "__main__":

@@ -23,10 +23,12 @@
     const res = await fetch(
       `/list/${id}/notes`);
     const response = await res.json();
+    console.log(response);
     if (!response.success) {
       dispatch("display-error", response.message);
       return false;
     }
+    console.log(response.notes);
     notes = response.notes;
   }
 
@@ -47,7 +49,7 @@
       dispatch("display-list-error", response.message);
       return false;
     }
-    notes = [...notes, await res.json()];
+    notes = [...notes, response.note];
     newNote = "";
   }
 
@@ -65,7 +67,8 @@
 
 
   function deleteList() {
-    dispatch("delete-list", id);
+    alert("Make this pop up a modal for deleting?");
+    // dispatch("delete-list", id);
   }
 
 </script>
@@ -79,12 +82,8 @@
       {name}
     </span>
     <span class="delete-list"
-      on:click={deleteList}>X</span>
+      on:click={deleteList}>+</span>
   </div>
-</div>
-<div class="new-note">
-  <input type="text" name="new-note" bind:value={newNote}>
-  <button on:click={addNote}>Add Note</button>
 </div>
 {#if notes}
   {#each notes as note (note.id)}
@@ -92,6 +91,10 @@
       on:delete-note={deleteNote}/>
   {/each}
 {/if}
+<div class="new-note">
+  <input type="text" name="new-note" bind:value={newNote}>
+  <button on:click={addNote}>Add Note</button>
+</div>
 </div>
 </section>
 
@@ -113,10 +116,12 @@
   /*background-color: hsla(228, 100%, 21%, 1);*/
   padding: 0.15rem 0.35rem;
   border-radius: 3px;
+  /*visibility: hidden;*/
 }
 
 .delete-list:hover {
   cursor: pointer;
+  visibility: inherit;
 }
 
 .list {
@@ -149,8 +154,9 @@ button:hover {
 }
 
 input {
-  border-radius: 3px;
+  /*border-radius: 3px;*/
   max-width: 65%;
+  color: #ccc;
 }
 
 </style>
