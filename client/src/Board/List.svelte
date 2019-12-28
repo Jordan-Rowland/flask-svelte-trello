@@ -6,6 +6,8 @@
   let dispatch = createEventDispatcher();
 
   import Note from "./Note.svelte";
+  import Button from "../UI/Button.svelte";
+  import TextInput from "../UI/TextInput.svelte";
 
 
   export let id;
@@ -23,10 +25,12 @@
     const res = await fetch(
       `/list/${id}/notes`);
     const response = await res.json();
+    console.log(response);
     if (!response.success) {
       dispatch("display-error", response.message);
       return false;
     }
+    console.log(response.notes);
     notes = response.notes;
   }
 
@@ -47,7 +51,7 @@
       dispatch("display-list-error", response.message);
       return false;
     }
-    notes = [...notes, await res.json()];
+    notes = [...notes, response.note];
     newNote = "";
   }
 
@@ -65,7 +69,8 @@
 
 
   function deleteList() {
-    dispatch("delete-list", id);
+    alert("Make this pop up a drop-down display for deleting?");
+    // dispatch("delete-list", id);
   }
 
 </script>
@@ -79,12 +84,8 @@
       {name}
     </span>
     <span class="delete-list"
-      on:click={deleteList}>X</span>
+      on:click={deleteList}>+</span>
   </div>
-</div>
-<div class="new-note">
-  <input type="text" name="new-note" bind:value={newNote}>
-  <button on:click={addNote}>Add Note</button>
 </div>
 {#if notes}
   {#each notes as note (note.id)}
@@ -92,6 +93,11 @@
       on:delete-note={deleteNote}/>
   {/each}
 {/if}
+<div class="new-note">
+  <!-- <input type="text" name="new-note" bind:value={newNote}> -->
+  <TextInput type="text" placeholder="Enter card title" bind:value={newNote} />
+  <Button text="Add Note" on:click={addNote} />
+</div>
 </div>
 </section>
 
@@ -109,23 +115,23 @@
 }
 
 .delete-list {
-  background-color: hsla(228, 100%, 61%, 1);
-  /*background-color: hsla(228, 100%, 21%, 1);*/
+  background-color: var(--theme-color);
   padding: 0.15rem 0.35rem;
   border-radius: 3px;
+  /*visibility: hidden;*/
 }
 
 .delete-list:hover {
   cursor: pointer;
+  visibility: inherit;
 }
 
 .list {
-  background-color: hsla(228, 100%, 61%, 1);
+  background-color: var(--theme-color);
   margin: 20px;
   display: flex;
   flex-direction: column;
-  min-width: 21vw;
-  max-width: 35vw;
+  width: 22vw;
   border-radius: 3px;
 }
 
@@ -139,18 +145,9 @@
   justify-content: space-around;
 }
 
-button {
-  border-radius: 3px;
-  margin-left: 0.35rem;
-  }
-
-button:hover {
-  cursor: pointer;
-}
-
 input {
-  border-radius: 3px;
   max-width: 65%;
+  color: #ccc;
 }
 
 </style>

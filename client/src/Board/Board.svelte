@@ -4,6 +4,8 @@
   const dispatch = createEventDispatcher();
 
   import List from "./List.svelte";
+  import Button from "../UI/Button.svelte";
+  import TextInput from "../UI/TextInput.svelte";
 
 
   onMount(() => {
@@ -69,13 +71,10 @@
 
 </script>
 
-  <div class="new-list">
-    <input type="text" name="newList" bind:value={listName} placeholder="New List Name">
-    <button
-      on:click={addList}>Add List</button>
+  <div class="header">
     <div class="logout-button">
-      <button
-        on:click={logoutUser}>Log Out</button>
+      <Button text="Log Out"
+        on:click={logoutUser} />
     </div>
   </div>
 
@@ -87,6 +86,12 @@
         on:display-list-error={event => dispatch("display-error", event.detail)} />
     {/each}
   {/if}
+
+  <div class="new-list">
+    <TextInput type="text" bind:value={listName} placeholder="New List Name" />
+    <Button class="new-list-button" text="Add List" on:click={addList} />
+  </div>
+
   </div>
 
 <style>
@@ -96,9 +101,25 @@
   background-color: hsl(170, 45%, 95%);
 }
 
-:global(*) {
-  /*font-family: 'Lato', sans-serif;*/
-  /*font-family: 'Mansalva', cursive;*/
+:global(:root) {
+  --theme-color: hsl(228, 100%, 61%);
+}
+
+.header {
+  position: fixed;
+  width: 100%;
+  display: flex;
+  top: 0;
+  left: 0;
+  background-color: var(--theme-color);
+  justify-content: flex-end;
+  align-content: center;
+}
+
+.logout-button {
+  position: relative;
+  right: 3.5px;
+  top: 3.5px;
 }
 
 .column {
@@ -107,29 +128,15 @@
   margin-top: 50px;
 }
 
+.column input {
+  margin: 0 0.35rem;
+  height: 35px;
+}
+
 .new-list {
-  position: fixed;
-  width: 99%;
   display: flex;
-  background-color: hsla(228, 100%, 61%, 1);
-  border-radius: 3px;
-  justify-content: center;
-  align-content: center;
-}
-
-.new-list > input, button {
-  margin: 9px;
-  border-radius: 3px;
-  margin-left: 0.35rem;
-}
-
-button:hover {
-  cursor: pointer;
-}
-
-.logout-button {
-  position: absolute;
-  right: 0.35rem;
+  margin: 12px;
+  margin-top: 1.2rem;
 }
 
 </style>

@@ -31,14 +31,14 @@
   transition: 0.3s;
   padding: 12px;
   min-width: 25%;
-  min-height: 4rem;
+  /*min-height: 4rem;*/
   margin: 0.75rem;
   border-radius: 3px;
 }
 
 button {
   position: absolute;
-  bottom: -2px;
+  top: 7px;
   right: 6px;
   border: none;
   background-color: hsla(228, 100%, 89%, 1);
