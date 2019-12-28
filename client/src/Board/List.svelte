@@ -67,7 +67,7 @@
 
 
   function deleteList() {
-    alert("Make this pop up a modal for deleting?");
+    alert("Make this pop up a drop-down display for deleting?");
     // dispatch("delete-list", id);
   }
 
@@ -112,8 +112,7 @@
 }
 
 .delete-list {
-  background-color: hsla(228, 100%, 61%, 1);
-  /*background-color: hsla(228, 100%, 21%, 1);*/
+  background-color: var(--theme-color);
   padding: 0.15rem 0.35rem;
   border-radius: 3px;
   /*visibility: hidden;*/
@@ -125,12 +124,11 @@
 }
 
 .list {
-  background-color: hsla(228, 100%, 61%, 1);
+  background-color: var(--theme-color);
   margin: 20px;
   display: flex;
   flex-direction: column;
-  min-width: 21vw;
-  max-width: 35vw;
+  width: 22vw;
   border-radius: 3px;
 }
 

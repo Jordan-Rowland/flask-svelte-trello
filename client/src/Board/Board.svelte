@@ -102,9 +102,8 @@
   background-color: hsl(170, 45%, 95%);
 }
 
-:global(*) {
-  /*font-family: 'Lato', sans-serif;*/
-  /*font-family: 'Mansalva', cursive;*/
+:global(:root) {
+  --theme-color: hsl(228, 100%, 61%);
 }
 
 .header {
@@ -113,7 +112,7 @@
   display: flex;
   top: 0;
   left: 0;
-  background-color: hsla(228, 100%, 61%, 1);
+  background-color: var(--theme-color);
   justify-content: flex-end;
   align-content: center;
 }
@@ -136,6 +135,12 @@
   margin-left: 0.35rem;
 }
 
+.column button {
+  margin-left: 1rem;
+  border-radius: 3px;
+  width: 85px;
+}
+
 button:hover {
   cursor: pointer;
 }
@@ -146,8 +151,7 @@ button:hover {
 
 .new-list {
   display: flex;
-  /*height: px;*/
-  margin-top: 10px;
+  margin: 12px;
 }
 
 </style>
