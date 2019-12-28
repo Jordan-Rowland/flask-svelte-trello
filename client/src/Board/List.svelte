@@ -6,6 +6,8 @@
   let dispatch = createEventDispatcher();
 
   import Note from "./Note.svelte";
+  import Button from "../UI/Button.svelte";
+  import TextInput from "../UI/TextInput.svelte";
 
 
   export let id;
@@ -92,8 +94,9 @@
   {/each}
 {/if}
 <div class="new-note">
-  <input type="text" name="new-note" bind:value={newNote}>
-  <button on:click={addNote}>Add Note</button>
+  <!-- <input type="text" name="new-note" bind:value={newNote}> -->
+  <TextInput type="text" placeholder="Enter card title" bind:value={newNote} />
+  <Button text="Add Note" on:click={addNote} />
 </div>
 </div>
 </section>
@@ -142,17 +145,7 @@
   justify-content: space-around;
 }
 
-button {
-  border-radius: 3px;
-  margin-left: 0.35rem;
-  }
-
-button:hover {
-  cursor: pointer;
-}
-
 input {
-  /*border-radius: 3px;*/
   max-width: 65%;
   color: #ccc;
 }

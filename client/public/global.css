@@ -36,7 +36,6 @@ input, button, select, textarea {
 	margin: 0 0 0.5em 0;
 	box-sizing: border-box;
 	border: 1px solid #ccc;
-	/*border-radius: 2px;*/
 }
 
 input:disabled {
@@ -45,20 +44,6 @@ input:disabled {
 
 input[type="range"] {
 	height: 0;
-}
-
-input {
-	/*height: 45px;*/
-	border: none;
-	outline: none;
-	border-bottom: 1px solid #ccc;
-	background-color: hsla(0, 0%, 0%, 0);
-}
-
-button {
-	color: #333;
-	background-color: #f4f4f4;
-	outline: none;
 }
 
 button:disabled {
