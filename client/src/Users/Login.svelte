@@ -2,6 +2,10 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
+  import { fetchPost } from "../helpers.js";
+  import Button from "../UI/Button.svelte";
+  import TextInput from "../UI/TextInput.svelte";
+
 
   let email;
   let password;
@@ -10,17 +14,9 @@
 
 
   async function loginUser() {
-    const res = await fetch(
-      "/login", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({email: email, password: password}),
-      }
+    const response = await fetchPost(
+      "/login", {email: email, password: password}
     );
-    const response = await res.json();
     if (!response.success) {
       dispatch("display-error", response.message);
       return false;
@@ -31,20 +27,12 @@
 
   async function signUpUser() {
     if (password !== confirmPassword) {
-      dispatch("display-error", "Passwords do not match")
+      dispatch("display-error", "Passwords do not match");
       return false;
     }
-    const res = await fetch(
-      "/signup", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({email: email, password: password}),
-      }
+    const response = await fetchPost(
+      "/signup", {email: email, password: password}
     );
-    const response = await res.json();
     if (!response.success) {
       dispatch("display-error", response.message);
       return false;
@@ -68,29 +56,67 @@
 <form>
 <label>
 Email<br>
-<input type="email" name="email" bind:value={email}>
+<!-- <input type="email" name="email" bind:value={email}> -->
+
+
+<TextInput
+  classes={"long"}
+  placeholder="Enter your email"
+  on:input={event => email = event.target.value}
+  value={email} />
+
+
+
+
 </label>
 
 <label>
 Password<br>
-<input type="password" name="password" bind:value={password}>
+<!-- <input type="password" name="password" bind:value={password}> -->
+
+<TextInput
+  classes={"long"}
+  placeholder="Enter your password"
+  on:input={event => password = event.target.value}
+  value={password} />
+
 </label>
 
 {#if !login}
 <label>
 Confirm Password<br>
-<input type="password" name="cPassword" bind:value={confirmPassword}>
+<!-- <input type="password" name="cPassword" bind:value={confirmPassword}> -->
+<TextInput
+  classes={"long"}
+  placeholder="Enter your password again"
+  on:input={event => confirmPassword = event.target.value}
+  value={confirmPassword} />
+
 </label>
 
-<button type="submit"
+<!-- <button type="submit"
   on:click|preventDefault={signUpUser}>
   Sign Up
-</button>
+</button> -->
+
+<Button type="submit"
+  on:click={signUpUser}>
+    <!-- This might not work because 'preventDefault is needed...' -->
+    Sign Up
+</Button>
+
 {:else}
-<button type="submit"
+<!-- <button type="submit"
   on:click|preventDefault={loginUser}>
   Login
-</button>
+</button> -->
+
+<Button type="submit"
+  on:click={loginUser}>
+    <!-- This might not work because 'preventDefault is needed...' -->
+    Login
+</Button>
+
 {/if}
 
 <label>

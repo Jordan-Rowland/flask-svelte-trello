@@ -2,17 +2,23 @@
 
   export let type = "text";
   export let placeholder;
+  export let value;
+  export let classes;
+
 
 </script>
 
-<input type={type} placeholder={placeholder}>
+<input
+  class={classes}
+  type={type}
+  placeholder={placeholder}
+  on:input>
 
 <style>
 
 input {
   height: 35px;
   max-width: 65%;
-  margin: 0 0.35rem;
   color: hsla(0, 0%, 0%, .90);
   border: none;
   outline: none;
@@ -21,7 +27,15 @@ input {
 }
 
 input::placeholder {
-  color: hsla(0, 0%, 20%, .5);
+  color: hsla(0, 0%, 20%, .60);
+}
+
+.long {
+  width: 15rem;
+}
+
+.margin-left {
+  margin: 0 0.35rem;
 }
 
 </style>

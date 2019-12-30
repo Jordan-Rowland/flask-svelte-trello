@@ -1,10 +1,14 @@
 <script>
 
-  export let text;
+  export let type = "button";
 
 </script>
 
-<button>{text}</button>
+<button
+  type={type}
+  on:click|preventDefault>
+    <slot />
+</button>
 
 <style>
 
@@ -21,5 +25,6 @@ button {
 button:hover {
   cursor: pointer;
 }
+
 
 </style>
