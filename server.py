@@ -96,8 +96,8 @@ def user_signup():
     user_exists = User.query.filter_by(email=email.lower()).first()
     if user_exists:
         return jsonify(success=False, message="email already exists")
-    # TODO:
-    # Some authentication if email = None ?
+    if not email:
+        return jsonify(success=False, message="must provide an email address")
     user = User(email.lower(), password)
     db.session.add(user)
     db.session.commit()

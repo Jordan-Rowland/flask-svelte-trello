@@ -37,9 +37,9 @@
 </script>
 
 {#if loggedIn == false}
-  <!-- <Login
+  <Login
     on:login-user={(event) => loggedIn = event.detail.success}
-    on:display-error={displayError} /> -->
+    on:display-error={displayError} />
 {:else if loggedIn}
   <Board on:logout-user={logoutUser}
     on:display-error={displayError} />
@@ -55,6 +55,10 @@
 :global(body) {
   margin: 0;
   background-color: hsl(170, 45%, 95%);
+}
+
+:global(:root) {
+  --theme-color: hsl(228, 100%, 61%);
 }
 
 :global(*) {
