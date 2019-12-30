@@ -86,6 +86,7 @@
 {/if}
 <div class="new-note">
   <TextInput
+    classes={"margin-left"}
     placeholder="Enter card title"
     on:input={event => newNote = event.target.value}
     value={newNote} />

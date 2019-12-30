@@ -28,12 +28,12 @@
   position: relative;
   display: flex;
   box-shadow: 0 4px 8px 0 hsla(0, 0%, 0%, 0.2);
-  transition: 0.3s;
+  /*transition: 0.3s;*/
   padding: 12px;
   min-width: 25%;
   margin: 0.75rem;
   border-radius: 3px;
-  word-wrap: break-word;
+  text-overflow: ellipsis;
 }
 
 button {
