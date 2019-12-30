@@ -3,8 +3,9 @@
   import { createEventDispatcher } from "svelte";
   import { slide } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
-  let dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher();
 
+  import { fetchGet, fetchPost } from "../helpers.js";
   import Note from "./Note.svelte";
   import Button from "../UI/Button.svelte";
   import TextInput from "../UI/TextInput.svelte";
@@ -22,31 +23,19 @@
 
 
   async function getNotes() {
-    const res = await fetch(
-      `/list/${id}/notes`);
-    const response = await res.json();
-    console.log(response);
+    const response = await fetchGet(`/list/${id}/notes`);
     if (!response.success) {
       dispatch("display-error", response.message);
       return false;
     }
-    console.log(response.notes);
     notes = response.notes;
   }
 
 
   async function addNote() {
-    const res = await fetch(
-      "/addNote", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({body: newNote, list_id: id}),
-      }
+    const response = await fetchPost(
+      "/addNote", {body: newNote, list_id: id}
     );
-    const response = await res.json();
     if (!response.success) {
       dispatch("display-list-error", response.message);
       return false;
@@ -73,6 +62,8 @@
     // dispatch("delete-list", id);
   }
 
+
+
 </script>
 
 <section
@@ -94,9 +85,13 @@
   {/each}
 {/if}
 <div class="new-note">
-  <!-- <input type="text" name="new-note" bind:value={newNote}> -->
-  <TextInput type="text" placeholder="Enter card title" bind:value={newNote} />
-  <Button text="Add Note" on:click={addNote} />
+  <TextInput
+    placeholder="Enter card title"
+    on:input={event => newNote = event.target.value}
+    value={newNote} />
+  <Button on:click={addNote}>
+    Add Notes
+  </Button>
 </div>
 </div>
 </section>

@@ -37,12 +37,12 @@
 </script>
 
 {#if loggedIn == false}
-  <Login
+  <!-- <Login
     on:login-user={(event) => loggedIn = event.detail.success}
-    on:display-error={displayError}/>
+    on:display-error={displayError} /> -->
 {:else if loggedIn}
   <Board on:logout-user={logoutUser}
-  on:display-error={displayError}/>
+    on:display-error={displayError} />
 {:else}
  <div></div>
 {/if}

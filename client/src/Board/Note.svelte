@@ -27,13 +27,13 @@
   background-color: hsla(258, 100%, 99%, 1);
   position: relative;
   display: flex;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 hsla(0, 0%, 0%, 0.2);
   transition: 0.3s;
   padding: 12px;
   min-width: 25%;
-  /*min-height: 4rem;*/
   margin: 0.75rem;
   border-radius: 3px;
+  word-wrap: break-word;
 }
 
 button {
