@@ -3,6 +3,7 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
+  import { fetchGet, fetchPost } from "../helpers.js";
   import List from "./List.svelte";
   import Button from "../UI/Button.svelte";
   import TextInput from "../UI/TextInput.svelte";
@@ -17,25 +18,15 @@
 
 
   async function getLists() {
-    const res = await fetch(
-      "/lists");
-    const response = await res.json();
+    const response = await fetchGet("/lists");
     lists = response.lists;
   }
 
 
   async function addList() {
-    const res = await fetch(
-      "/addList", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({name: listName}),
-      }
+    const response = await fetchPost(
+      "/addList", {name: listName}
     );
-    const response = await res.json();
     if (!response.success) {
       dispatch("display-error", response.message);
       return false;
@@ -47,10 +38,7 @@
 
   async function deleteList(event) {
     const selectedId = event.detail;
-    const res = await fetch(
-      `/deleteList/${selectedId}`, {method: "DELETE"}
-    );
-    const response = await res.json();
+    const response = await fetchGet(`/deleteList/${selectedId}`);
     if (!response.success) {
       dispatch("display-error", response.message);
       return false;
@@ -73,8 +61,10 @@
 
   <div class="header">
     <div class="logout-button">
-      <Button text="Log Out"
-        on:click={logoutUser} />
+      <Button
+        on:click={logoutUser}>
+          Log Out
+      </Button>
     </div>
   </div>
 
@@ -83,13 +73,20 @@
     {#each lists as list, index (list.id)}
       <List name={list.name} id={list.id}
         on:delete-list={deleteList}
-        on:display-list-error={event => dispatch("display-error", event.detail)} />
+        on:display-list-error={event => {
+          dispatch("display-error", event.detail) // Does this need a 'return' ?
+        }} />
     {/each}
   {/if}
 
   <div class="new-list">
-    <TextInput type="text" bind:value={listName} placeholder="New List Name" />
-    <Button class="new-list-button" text="Add List" on:click={addList} />
+    <TextInput
+      placeholder="Enter card title"
+      on:input={event => listName = event.target.value}
+      value={listName} />
+    <Button on:click={addList}>
+      Add List
+    </Button>
   </div>
 
   </div>

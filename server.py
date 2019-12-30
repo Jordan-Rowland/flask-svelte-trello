@@ -59,8 +59,6 @@ def home(path):
 
 ####################################
 
-# TODO: Add more 'success' json back to make error handling better
-
 
 @app.route("/checkLogin")
 def check_login():

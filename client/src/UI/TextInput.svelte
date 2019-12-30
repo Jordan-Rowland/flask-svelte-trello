@@ -2,10 +2,11 @@
 
   export let type = "text";
   export let placeholder;
+  export let value;
 
 </script>
 
-<input type={type} placeholder={placeholder}>
+<input type={type} placeholder={placeholder} on:input>
 
 <style>
 
@@ -21,7 +22,7 @@ input {
 }
 
 input::placeholder {
-  color: hsla(0, 0%, 20%, .5);
+  color: hsla(0, 0%, 20%, .60);
 }
 
 </style>

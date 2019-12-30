@@ -1,10 +1,14 @@
 <script>
 
-  export let text;
+
 
 </script>
 
-<button>{text}</button>
+<button
+  type="button"
+  on:click>
+    <slot />
+</button>
 
 <style>
 

@@ -2,6 +2,8 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
+  import { fetchPost } from "../helpers.js";
+
 
   let email;
   let password;
@@ -10,17 +12,9 @@
 
 
   async function loginUser() {
-    const res = await fetch(
-      "/login", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({email: email, password: password}),
-      }
+    const response = await fetchPost(
+      "/login", {email: email, password: password}
     );
-    const response = await res.json();
     if (!response.success) {
       dispatch("display-error", response.message);
       return false;
@@ -31,20 +25,12 @@
 
   async function signUpUser() {
     if (password !== confirmPassword) {
-      dispatch("display-error", "Passwords do not match")
+      dispatch("display-error", "Passwords do not match");
       return false;
     }
-    const res = await fetch(
-      "/signup", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({email: email, password: password}),
-      }
+    const response = await fetchPost(
+      "/signup", {email: email, password: password}
     );
-    const response = await res.json();
     if (!response.success) {
       dispatch("display-error", response.message);
       return false;
