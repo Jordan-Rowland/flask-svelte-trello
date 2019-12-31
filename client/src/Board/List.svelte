@@ -100,13 +100,13 @@
 <style>
 
 .name {
-  background-color: hsla(230, 80%, 30%, 1);
+  /*background-color: hsl(205, 76%, 39%);*/
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
   padding: 5px;
   margin: 5px;
-  color: hsla(258, 100%, 99%, 1);
+  color: #010;
   font-weight: 800;
 }
 
