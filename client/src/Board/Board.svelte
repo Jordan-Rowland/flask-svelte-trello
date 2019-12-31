@@ -94,13 +94,24 @@
 
 <style>
 
+:global(body) {
+  margin: 0;
+  /*background-color: hsl(170, 45%, 95%);*/
+  background-color: hsl(205, 65%, 55%);
+}
+
+:global(:root) {
+  /*--theme-color: hsl(228, 100%, 61%);*/
+  --theme-color: hsl(212, 33%, 89%);
+}
+
 .header {
   position: fixed;
   width: 100%;
   display: flex;
   top: 0;
   left: 0;
-  background-color: var(--theme-color);
+  background-color: hsl(205, 76%, 39%);
   justify-content: flex-end;
   align-content: center;
 }
