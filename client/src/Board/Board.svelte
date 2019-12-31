@@ -14,7 +14,7 @@
   });
 
   let lists = [];
-  let listName;
+  let listName = "";
 
 
   async function getLists() {
@@ -60,6 +60,9 @@
 </script>
 
   <div class="header">
+    <span class="headline">
+      Svello
+    </span>
     <div class="logout-button">
       <Button
         on:click={logoutUser}>
@@ -114,6 +117,15 @@
   background-color: hsl(205, 76%, 39%);
   justify-content: flex-end;
   align-content: center;
+}
+
+.headline {
+  position: relative;
+  font-size: 32px;
+  margin: auto;
+  left: 60px;
+  font-weight: 800;
+  color: #efe;
 }
 
 .logout-button {

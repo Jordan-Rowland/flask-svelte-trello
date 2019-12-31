@@ -7,9 +7,9 @@
   import TextInput from "../UI/TextInput.svelte";
 
 
-  let email;
-  let password;
-  let confirmPassword;
+  let email = "";
+  let password = "";
+  let confirmPassword = "";
   let login = true;
 
 
@@ -56,8 +56,6 @@
 <form>
 <label>
 Email<br>
-<!-- <input type="email" name="email" bind:value={email}> -->
-
 
 <TextInput
   classes={"long"}
@@ -65,14 +63,10 @@ Email<br>
   on:input={event => email = event.target.value}
   value={email} />
 
-
-
-
 </label>
 
 <label>
 Password<br>
-<!-- <input type="password" name="password" bind:value={password}> -->
 
 <TextInput
   classes={"long"}
@@ -85,7 +79,6 @@ Password<br>
 {#if !login}
 <label>
 Confirm Password<br>
-<!-- <input type="password" name="cPassword" bind:value={confirmPassword}> -->
 <TextInput
   classes={"long"}
   placeholder="Enter your password again"
@@ -94,26 +87,15 @@ Confirm Password<br>
 
 </label>
 
-<!-- <button type="submit"
-  on:click|preventDefault={signUpUser}>
-  Sign Up
-</button> -->
-
 <Button type="submit"
   on:click={signUpUser}>
-    <!-- This might not work because 'preventDefault is needed...' -->
     Sign Up
 </Button>
 
 {:else}
-<!-- <button type="submit"
-  on:click|preventDefault={loginUser}>
-  Login
-</button> -->
 
 <Button type="submit"
   on:click={loginUser}>
-    <!-- This might not work because 'preventDefault is needed...' -->
     Login
 </Button>
 

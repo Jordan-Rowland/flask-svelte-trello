@@ -15,7 +15,7 @@
   export let name;
 
   let notes = [];
-  let newNote;
+  let newNote = "";
 
   onMount(() => {
     getNotes();

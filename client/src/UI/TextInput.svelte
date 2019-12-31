@@ -10,8 +10,9 @@
 
 <input
   class={classes}
-  type={type}
-  placeholder={placeholder}
+  {type}
+  {placeholder}
+  {value}
   on:input>
 
 <style>
