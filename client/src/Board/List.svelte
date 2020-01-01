@@ -58,8 +58,8 @@
 
 
   function deleteList() {
-    alert("Make this pop up a drop-down display for deleting?");
-    // dispatch("delete-list", id);
+    // alert("Make this pop up a drop-down display for deleting?");
+    dispatch("delete-list", id);
   }
 
 
@@ -75,7 +75,7 @@
       {name}
     </span>
     <span class="delete-list"
-      on:click={deleteList}>+</span>
+      on:click={deleteList}>✕</span>
   </div>
 </div>
 {#if notes}

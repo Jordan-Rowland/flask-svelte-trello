@@ -38,7 +38,10 @@
 
   async function deleteList(event) {
     const selectedId = event.detail;
-    const response = await fetchGet(`/deleteList/${selectedId}`);
+    const res = await fetch(
+      `/deleteList/${selectedId}`, {method: "DELETE"}
+    );
+    const response = await res.json();
     if (!response.success) {
       dispatch("display-error", response.message);
       return false;

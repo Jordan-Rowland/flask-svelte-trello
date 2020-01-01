@@ -20,7 +20,7 @@
   in:slide="{{delay: 100, duration: 300, easing: circIn}}">
   <div class="error">
     <span class="error-close"
-      on:click={closeError}>X</span>
+      on:click={closeError}>✕</span>
     <h4>{message}</h4>
   </div>
 </div>
@@ -45,7 +45,7 @@
 .error-close {
   position: absolute;
   top: 5.5px;
-  right: 5.5px;
+  right: 8.5px;
   cursor: pointer;
 }
 
