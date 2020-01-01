@@ -205,5 +205,29 @@ def delete_note(list_id, note_id):
     return jsonify(success=True, message=(f"note {note_id} deleted from list {list_id}"))
 
 
+@app.route("/editNote/<int:note_id>", methods=["POST"])
+@login_required
+def edit_note(note_id):
+    body = request.get_json().get("body")
+    if not body:
+        return jsonify(success=False, message="must provide a note"), 400
+    note = Note.query.filter_by(id=note_id).first()
+    user_lists = [list.id for list in current_user.lists]
+    list_id = note.list_id
+    if list_id not in user_lists:
+        return (
+            jsonify(
+                success=False,
+                message=(
+                    "this list does not exist or you are not authorized to take this action"
+                ),
+            ),
+            401,
+        )
+    note.body = body
+    db.session.commit()
+    return jsonify(success=True, message=(f"note {note_id} updated to '{body}'"))
+
+
 if __name__ == "__main__":
     app.run(port=3000)
