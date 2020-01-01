@@ -59,6 +59,7 @@ Email<br>
 
 <TextInput
   classes={"long"}
+  type="email"
   placeholder="Enter your email"
   on:input={event => email = event.target.value}
   value={email} />
@@ -70,6 +71,7 @@ Password<br>
 
 <TextInput
   classes={"long"}
+  type="password"
   placeholder="Enter your password"
   on:input={event => password = event.target.value}
   value={password} />
@@ -81,6 +83,7 @@ Password<br>
 Confirm Password<br>
 <TextInput
   classes={"long"}
+  type="password"
   placeholder="Enter your password again"
   on:input={event => confirmPassword = event.target.value}
   value={confirmPassword} />
