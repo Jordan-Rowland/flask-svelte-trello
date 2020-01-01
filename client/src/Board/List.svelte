@@ -86,14 +86,18 @@
   {/each}
 {/if}
 <div class="new-note">
-  <TextInput
-    classes={"margin-left"}
-    placeholder="Enter card title"
-    on:input={event => newNote = event.target.value}
-    value={newNote} />
-  <Button on:click={addNote}>
-    Add Notes
-  </Button>
+  <form>
+    <TextInput
+      classes={"margin-left"}
+      placeholder="Enter card title"
+      on:input={event => newNote = event.target.value}
+      value={newNote} />
+    <Button
+      type="submit"
+      on:click={addNote}>
+        Add Note
+    </Button>
+  </form>
 </div>
 </div>
 </section>

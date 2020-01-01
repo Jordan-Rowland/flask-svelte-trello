@@ -86,14 +86,18 @@
   {/if}
 
   <div class="new-list">
-    <TextInput
-      classes={"margin-left"}
-      placeholder="Enter card title"
-      on:input={event => listName = event.target.value}
-      value={listName} />
-    <Button on:click={addList}>
-      Add List
-    </Button>
+    <form>
+      <TextInput
+        classes={"margin-left"}
+        placeholder="Enter list name"
+        on:input={event => listName = event.target.value}
+        value={listName} />
+      <Button
+        type="submit"
+        on:click={addList}>
+          Add List
+      </Button>
+    </form>
   </div>
 
   </div>
