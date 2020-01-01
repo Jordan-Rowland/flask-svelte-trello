@@ -77,7 +77,7 @@
       <List name={list.name} id={list.id}
         on:delete-list={deleteList}
         on:display-list-error={event => {
-          dispatch("display-error", event.detail) // Does this need a 'return' ?
+          dispatch("display-error", event.detail)
         }} />
     {/each}
   {/if}

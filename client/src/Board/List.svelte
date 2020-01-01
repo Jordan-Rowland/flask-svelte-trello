@@ -81,7 +81,8 @@
 {#if notes}
   {#each notes as note (note.id)}
     <Note noteBody={note.body} id={note.id}
-      on:delete-note={deleteNote}/>
+      on:delete-note={deleteNote}
+      on:display-error={event => dispatch("display-list-error", event.detail)} />
   {/each}
 {/if}
 <div class="new-note">
