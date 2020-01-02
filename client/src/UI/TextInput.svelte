@@ -3,7 +3,7 @@
   export let type = "text";
   export let placeholder;
   export let value;
-  export let classes;
+  export let classes = "";
 
 
 </script>

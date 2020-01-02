@@ -1,7 +1,7 @@
 <script>
 
   export let type = "button";
-  export let classes;
+  export let classes = "";
 
 </script>
 

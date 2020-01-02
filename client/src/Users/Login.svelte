@@ -132,10 +132,7 @@ Login
 .form {
   position: relative;
   margin: 4rem auto;
-  /*display: flex;*/
   left: 85px;
-  /*justify-content: flex-end;*/
-  /*align-items: center;*/
 }
 
 label {
