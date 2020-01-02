@@ -88,12 +88,15 @@
   <div class="new-list">
     <form>
       <TextInput
-        classes={"margin-left"}
+        classes={"margin-left inline longer"}
         placeholder="Enter list name"
         on:input={event => listName = event.target.value}
         value={listName} />
+    <br>
+    <br>
       <Button
         type="submit"
+        classes={"inline"}
         on:click={addList}>
           Add List
       </Button>
@@ -106,12 +109,10 @@
 
 :global(body) {
   margin: 0;
-  /*background-color: hsl(170, 45%, 95%);*/
   background-color: hsl(205, 65%, 55%);
 }
 
 :global(:root) {
-  /*--theme-color: hsl(228, 100%, 61%);*/
   --theme-color: hsl(212, 33%, 89%);
 }
 
@@ -153,13 +154,18 @@
 }
 
 .new-list {
-  display: flex;
+  /*display: flex;*/
   margin: 12px;
   margin-top: 1.2rem;
 }
 
-.test {
-  margin-top: 500px;
+.new-list {
+  /*display: flex;*/
+  margin: 12px;
+  margin-top: 1.2rem;
 }
 
+form * {
+  display: inline;
+}
 </style>

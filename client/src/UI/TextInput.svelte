@@ -3,7 +3,7 @@
   export let type = "text";
   export let placeholder;
   export let value;
-  export let classes;
+  export let classes = "";
 
 
 </script>
@@ -32,11 +32,19 @@ input::placeholder {
 }
 
 .long {
-  width: 15rem;
+  width: 20rem;
+}
+
+.longer {
+  width: 30rem;
 }
 
 .margin-left {
   margin: 0 0.35rem;
+}
+
+.inline {
+  display: inline-flex;
 }
 
 </style>

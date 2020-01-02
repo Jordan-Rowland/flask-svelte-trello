@@ -58,7 +58,7 @@
 Email<br>
 
 <TextInput
-  classes={"long"}
+  classes={"longer"}
   type="email"
   placeholder="Enter your email"
   on:input={event => email = event.target.value}
@@ -70,7 +70,7 @@ Email<br>
 Password<br>
 
 <TextInput
-  classes={"long"}
+  classes={"longer"}
   type="password"
   placeholder="Enter your password"
   on:input={event => password = event.target.value}
@@ -82,7 +82,7 @@ Password<br>
 <label>
 Confirm Password<br>
 <TextInput
-  classes={"long"}
+  classes={"longer"}
   type="password"
   placeholder="Enter your password again"
   on:input={event => confirmPassword = event.target.value}
@@ -130,14 +130,13 @@ Login
 }
 
 .form {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
+  margin: 4rem auto;
+  left: 85px;
 }
 
 label {
-  margin-bottom: 0.45rem;
+  margin-bottom: 1.5rem;
 }
 
 </style>
