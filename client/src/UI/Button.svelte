@@ -1,10 +1,12 @@
 <script>
 
   export let type = "button";
+  export let classes;
 
 </script>
 
 <button
+  class={classes}
   type={type}
   on:click|preventDefault>
     <slot />
@@ -26,5 +28,8 @@ button:hover {
   cursor: pointer;
 }
 
+.inline {
+  display: inline;
+}
 
 </style>
