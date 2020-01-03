@@ -88,7 +88,7 @@
   <div class="new-list">
     <form>
       <TextInput
-        classes={"margin-left inline longer"}
+        classes="margin-left inline longer"
         placeholder="Enter list name"
         on:input={event => listName = event.target.value}
         value={listName} />

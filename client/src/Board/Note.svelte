@@ -20,9 +20,8 @@
   }
 
   async function saveEditNote(event) {
-    // dispatch("edit-note", id);
     const response = await fetchPost(
-      `/editNote/${id}`, {body: event.detail}
+      `/editNote/${id}`, {body: event.detail.trim()}
     );
     if (!response.success) {
       dispatch("display-error", response.message);

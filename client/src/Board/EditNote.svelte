@@ -13,7 +13,7 @@
 
 </script>
 
-<!-- <div class="backdrop" on:click={closeModal}></div> -->
+<div class="backdrop" on:click={closeModal}></div>
 <div class="modal">
   <span class="close-modal" on:click={closeModal}>✕</span>
   <textarea rows="10" on:input={event => note = event.target.value}>{note}</textarea>
@@ -31,16 +31,14 @@
   left: 0;
   width: 100%;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.75);
+  /*background: rgba(0, 0, 0, 0.75);*/
   z-index: 10;
 }
 
 .modal {
   padding: 1rem;
   position: absolute;
-  /*top: 10;*/
   width: 80%;
-  /*max-height: 20vh;*/
   background: white;
   border-radius: 5px;
   z-index: 100;

@@ -137,10 +137,9 @@ def delete_list(list_id):
 @app.route("/list/<int:list_id>/notes")
 @login_required
 def get_notes(list_id):
-    query = [list for list in current_user.lists if list.id == list_id]
-    if not query:
+    notes = Note.query.filter_by(list_id=list_id).order_by(Note.timestamp.desc()).all()
+    if not auth_list_permissions(current_user, list_id):
         return unauthorized()
-    notes = query[0].notes
     return jsonify(success=True, notes=[note.to_json() for note in notes])
 
 
