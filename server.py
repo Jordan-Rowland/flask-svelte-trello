@@ -40,7 +40,6 @@ login_manager.init_app(app)
 
 
 from models import List, Note, User
-
 ####################################
 
 
