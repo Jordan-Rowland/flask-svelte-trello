@@ -20,6 +20,8 @@ from flask_sqlalchemy import SQLAlchemy
 from helpers import auth_list_permissions, unauthorized
 
 
+####################################
+# Config
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 DEVELOPMENT = bool(os.environ.get("FLASK_DEVELOPMENT"))
@@ -53,9 +55,6 @@ def base():
 @app.route("/<path:path>")
 def home(path):
     return send_from_directory("client/public", path)
-
-
-####################################
 
 
 @app.route("/checkLogin")
