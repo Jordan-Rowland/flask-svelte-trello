@@ -23,5 +23,6 @@ Database has also been migrated from SQLite3 to PostGres, so all notes, lists, a
 Big UI overhaul
 
 TODO:
+- Implement 'forgot password' feature
 - Multiple boards for each user
 - Drag and Drop functionality/re-order lists and notes
