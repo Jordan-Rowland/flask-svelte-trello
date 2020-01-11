@@ -9,3 +9,4 @@ echo FLASK_APP=$FLASK_APP
 echo FLASK_DEBUG=$FLASK_DEBUG
 echo FLASK_DEVELOPMENT=$FLASK_DEVELOPMENT
 echo "apprun to run app"
+apprun
