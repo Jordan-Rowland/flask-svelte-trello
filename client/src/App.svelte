@@ -7,7 +7,6 @@
   let errorMessage;
   let errorShow;
 
-
   let loggedIn;
 
 
@@ -29,6 +28,7 @@
     const response = await res.json();
   }
 
+
   function displayError(event) {
     errorMessage = event.detail;
     errorShow = true;
@@ -38,7 +38,7 @@
 
 {#if loggedIn == false}
   <Login
-    on:login-user={(event) => loggedIn = event.detail.success}
+    on:login-user={event => loggedIn = event.detail.success}
     on:display-error={displayError} />
 {:else if loggedIn}
   <Board on:logout-user={logoutUser}
@@ -59,15 +59,6 @@
 
 :global(:root) {
   --theme-color: hsl(228, 100%, 61%);
-}
-
-:global(*) {
-  /*font-family: 'Lato', sans-serif;*/
-  /*font-family: 'Mansalva', cursive;*/
-}
-
-button:hover {
-  cursor: pointer;
 }
 
 </style>
